@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>45-Day AI Engineer Roadmap (2026 Market Edition)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9;
+            color: #1c1917;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+
+        /* Chart Container Styles - Mandatory */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* Interactive Node Styles for HTML Diagrams */
+        .node {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .node.active {
+            border-color: #4f46e5;
+            background-color: #eef2ff;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Markdown Styles */
+        .prose p {
+            margin-bottom: 0.75rem;
+        }
+
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .prose pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .prose code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .prose strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+        /* Interactive Quiz Styles */
+        .quiz-option {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .quiz-option:hover {
+            border-color: #6366f1;
+            /* Indigo-500 */
+            background-color: #f5f3ff;
+        }
+
+        .quiz-option.selected {
+            border-color: #4f46e5;
+            background-color: #e0e7ff;
+            box-shadow: 0 0 0 1px #4f46e5;
+        }
+
+        .quiz-option.correct {
+            border-color: #059669 !important;
+            background-color: #d1fae5 !important;
+            color: #065f46;
+        }
+
+        .quiz-option.wrong {
+            border-color: #b91c1c !important;
+            background-color: #fee2e2 !important;
+            color: #991b1b;
+        }
+
+        .quiz-explanation {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body class="text-stone-800 h-screen flex overflow-hidden">
+
+    <!-- Mobile Header -->
+    <div
+        class="fixed top-0 left-0 w-full h-16 bg-white border-b border-stone-200 flex items-center justify-between px-4 z-50 md:hidden">
+        <h1 class="text-lg font-bold text-stone-900">AI Roadmap 2026</h1>
+        <button id="menuToggle" class="text-stone-600 focus:outline-none">
+            <span class="text-2xl">☰</span>
+        </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 w-64 bg-white border-r border-stone-200 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 z-40 flex flex-col pt-16 md:pt-0">
+        <div class="p-6 border-b border-stone-100">
+            <h1 class="text-xl font-bold text-stone-900 leading-tight">AI Engineer<br><span class="text-indigo-600">2026
+                    Roadmap</span></h1>
+            <p class="text-xs text-stone-500 mt-2">Target: Agentic Solutions Architect</p>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+            <button onclick="router('dashboard')"
+                class="nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-stone-100 text-stone-600 transition-colors"
+                data-target="dashboard">
+                📊 Dashboard
+            </button>
+
+            <div class="pt-4 pb-2 px-3 text-xs font-semibold text-stone-400 uppercase tracking-wider">Phases</div>
+
+            <button onclick="router('phase1')"
+                class="nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-stone-100 text-stone-600 transition-colors flex justify-between items-center"
+                data-target="phase1">
+                <span>Phase 1: Foundation</span>
+                <span class="text-xs bg-stone-100 text-stone-500 px-1.5 py-0.5 rounded">D1-10</span>
+            </button>
+            <button onclick="router('phase2')"
+                class="nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-stone-100 text-stone-600 transition-colors flex justify-between items-center"
+                data-target="phase2">
+                <span>Phase 2: RAG Pipeline</span>
+                <span class="text-xs bg-stone-100 text-stone-500 px-1.5 py-0.5 rounded">D11-20</span>
+            </button>
+            <button onclick="router('phase3')"
+                class="nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-stone-100 text-stone-600 transition-colors flex justify-between items-center"
+                data-target="phase3">
+                <span>Phase 3: Agentic Shift</span>
+                <span class="text-xs bg-stone-100 text-stone-500 px-1.5 py-0.5 rounded">D21-30</span>
+            </button>
+            <button onclick="router('phase4')"
+                class="nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-stone-100 text-stone-600 transition-colors flex justify-between items-center"
+                data-target="phase4">
+                <span>Phase 4: Architecture</span>
+                <span class="text-xs bg-stone-100 text-stone-500 px-1.5 py-0.5 rounded">D31-38</span>
+            </button>
+            <button onclick="router('phase5')"
+                class="nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-stone-100 text-stone-600 transition-colors flex justify-between items-center"
+                data-target="phase5">
+                <span>Phase 5: Capstone</span>
+                <span class="text-xs bg-stone-100 text-stone-500 px-1.5 py-0.5 rounded">D39-45</span>
+            </button>
+
+            <div class="pt-4 pb-2 px-3 text-xs font-semibold text-stone-400 uppercase tracking-wider">Resources</div>
+            <button onclick="router('techstack')"
+                class="nav-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium hover:bg-stone-100 text-stone-600 transition-colors"
+                data-target="techstack">
+                🛠️ Tech Stack 2026
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-stone-200 bg-stone-50">
+            <p class="text-xs font-semibold text-stone-500 mb-2">Completion Status</p>
+            <div class="chart-container" style="height: 120px; max-height: 120px;">
+                <canvas id="progressChart"></canvas>
+            </div>
+            <div class="text-center mt-1">
+                <span id="progressText" class="text-xl font-bold text-indigo-600">0%</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto bg-stone-50 pt-16 md:pt-0 w-full relative">
+        <div id="content" class="p-6 md:p-10 max-w-6xl mx-auto">
+            <!-- Dynamic Content Injected Here -->
+        </div>
+    </main>
+
+    <!-- AI Modal -->
+    <div id="aiModal"
+        class="fixed inset-0 bg-stone-900/50 hidden items-center justify-center z-[100] backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl m-4 flex flex-col max-h-[90vh] transform scale-95 transition-transform duration-300"
+            id="aiModalContent">
+            <!-- Modal Header -->
+            <div
+                class="px-6 py-4 border-b border-stone-100 flex justify-between items-center bg-indigo-50/50 rounded-t-xl">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">✨</span>
+                    <h3 id="aiModalTitle" class="font-bold text-indigo-900 text-lg">AI Assistant</h3>
+                </div>
+                <button onclick="closeModal()"
+                    class="text-stone-400 hover:text-stone-600 p-1 hover:bg-stone-100 rounded-lg transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar" id="aiModalBody">
+                <!-- Content will be injected here -->
+                <div class="flex flex-col items-center justify-center py-12 space-y-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                    <p class="text-stone-500 animate-pulse">Consulting the AI Neural Net...</p>
+                </div>
+            </div>
+
+            <!-- Modal Footer (Optional for Actions) -->
+            <div class="px-6 py-3 border-t border-stone-100 bg-stone-50 rounded-b-xl flex justify-end">
+                <button onclick="closeModal()"
+                    class="px-4 py-2 bg-white border border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 text-sm font-medium transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- API Configuration & Encryption ---
+        const ENCRYPTION_SECRET = "VentureScope_Gemini_Secret_Salt_v1";
+
+        function decryptData(ciphertext) {
+            try {
+                const text = atob(ciphertext);
+                let result = "";
+                for (let i = 0; i < text.length; i++) {
+                    result += String.fromCharCode(text.charCodeAt(i) ^ ENCRYPTION_SECRET.charCodeAt(i % ENCRYPTION_SECRET.length));
+                }
+                return result;
+            } catch (e) { return ""; }
+        }
+
+        const encryptedKey = localStorage.getItem('gemini_api_key');
+        const apiKey = encryptedKey ? decryptData(encryptedKey) : "";
+
+        if (!apiKey) {
+            console.warn("VentureScope: No API Key found. AI features will be disabled until configured in the Hub.");
+        }
+
+        // --- Data Models ---
+        const phases = {
+            phase1: {
+                title: "Phase 1: The Modern Foundation",
+                days: "Days 1–10",
+                desc: "Mastering the structured data logic that controls modern AI. Moving away from 'text generation' to 'function calling' and 'structured output'.",
+                focus: ["Python Type Hinting", "Pydantic", "OpenAI/Anthropic API", "Vector Databases"],
+                sections: [
+                    {
+                        title: "Days 1-3: The 'Pydantic' Shift",
+                        tasks: [
+                            { id: "p1_t1", text: "Learn Python Type Hinting (List, Optional, Dict)", type: "learn" },
+                            { id: "p1_t2", text: "Master Pydantic (BaseModel, Field)", type: "code" },
+                            { id: "p1_t3", text: "Assignment: Build Raw Text -> JSON Extractor", type: "project" }
+                        ],
+                        insight: "In 2026, AI is a logic engine, not a chatbot. It must output reliable JSON, which requires Pydantic."
+                    },
+                    {
+                        title: "Days 4-6: Brain APIs & Tools",
+                        tasks: [
+                            { id: "p1_t4", text: "Learn System vs User Prompts", type: "learn" },
+                            { id: "p1_t5", text: "Implement Function Calling (Tool Use)", type: "code" },
+                            { id: "p1_t6", text: "Assignment: CLI Calculator using Tool Calls", type: "project" }
+                        ],
+                        insight: "Don't ask the LLM to do math. Teach it to call a Python function using tools."
+                    },
+                    {
+                        title: "Days 7-10: Memory & Vectors",
+                        tasks: [
+                            { id: "p1_t7", text: "Understand Embeddings (Text-to-Numbers)", type: "learn" },
+                            { id: "p1_t8", text: "Setup Pinecone (Cloud) or ChromaDB (Local)", type: "code" },
+                            { id: "p1_t9", text: "Assignment: The PDF Search Engine", type: "project" }
+                        ],
+                        insight: "Vector databases allow AI to search massive datasets semantically, not just by keyword."
+                    }
+                ]
+            },
+            phase2: {
+                title: "Phase 2: RAG & Data Pipeline",
+                days: "Days 11–20",
+                desc: "Connecting AI to private data without hallucinations. From basic retrieval to industry-standard hybrid search and re-ranking.",
+                focus: ["LangChain", "Hybrid Search", "Re-ranking", "Ragas Evaluation"],
+                sections: [
+                    {
+                        title: "Days 11-14: Basic RAG",
+                        tasks: [
+                            { id: "p2_t1", text: "Learn Context Window limitations", type: "learn" },
+                            { id: "p2_t2", text: "Build 'Chat with your Data' app", type: "project" },
+                            { id: "p2_t3", text: "Implement Retrieve -> Stuff -> Generate loop", type: "code" }
+                        ],
+                        insight: "Basic RAG is the 'Hello World' of AI Engineering. It retrieves text chunks relevant to a user query."
+                    },
+                    {
+                        title: "Days 15-18: Advanced RAG",
+                        tasks: [
+                            { id: "p2_t4", text: "Implement Hybrid Search (BM25 + Vector)", type: "code" },
+                            { id: "p2_t5", text: "Add Re-ranking (Cohere/BGE)", type: "code" },
+                            { id: "p2_t6", text: "Assignment: Add citation/page numbers to PDF app", type: "project" }
+                        ],
+                        insight: "Basic RAG fails 40% of the time. Re-ranking ensures the 'best' chunks reach the LLM."
+                    },
+                    {
+                        title: "Days 19-20: Evaluation",
+                        tasks: [
+                            { id: "p2_t7", text: "Setup Ragas or DeepEval", type: "code" },
+                            { id: "p2_t8", text: "Measure Faithfulness & Context Precision", type: "learn" },
+                            { id: "p2_t9", text: "Assignment: Write a test suite for RAG app", type: "project" }
+                        ],
+                        insight: "LLM-as-a-Judge: Using a strong model (GPT-4) to grade the answers of your application."
+                    }
+                ]
+            },
+            phase3: {
+                title: "Phase 3: The Agentic Shift",
+                days: "Days 21–30",
+                desc: "The critical pivot from linear chains to looping agents. Building systems that can reason, plan, and self-correct.",
+                focus: ["Tool Use", "Routing", "LangGraph", "State Management"],
+                sections: [
+                    {
+                        title: "Days 21-24: Tool Use & Routing",
+                        tasks: [
+                            { id: "p3_t1", text: "Concept: The AI Router", type: "learn" },
+                            { id: "p3_t2", text: "Assignment: Build a 'Helper Bot' (Time/Joke/Stock API)", type: "project" }
+                        ],
+                        insight: "Static chains are brittle. Routers decide which path to take dynamically based on user input."
+                    },
+                    {
+                        title: "Days 25-30: LangGraph Orchestration",
+                        tasks: [
+                            { id: "p3_t3", text: "Learn Nodes, Edges, and State", type: "learn" },
+                            { id: "p3_t4", text: "Implement Human-in-the-loop logic", type: "code" },
+                            { id: "p3_t5", text: "Assignment: Self-Correcting Researcher", type: "project" }
+                        ],
+                        insight: "LangGraph is the standard for 2026. It allows cycles (loops) in logic, essential for fixing errors."
+                    }
+                ]
+            },
+            phase4: {
+                title: "Phase 4: Advanced Architecture",
+                days: "Days 31–38",
+                desc: "Scaling to Multi-Agent Systems where specialized agents collaborate under a supervisor.",
+                focus: ["Multi-Agent Systems", "Supervisor Pattern", "GraphRAG"],
+                sections: [
+                    {
+                        title: "Days 31-35: Multi-Agent Systems",
+                        tasks: [
+                            { id: "p4_t1", text: "Concept: Supervisor Pattern", type: "learn" },
+                            { id: "p4_t2", text: "Build 'The Dev Team' (Coder, Reviewer, Supervisor)", type: "project" }
+                        ],
+                        insight: "One genius model vs. a team of specialists. Specialized prompts lead to better performance."
+                    },
+                    {
+                        title: "Days 36-38: GraphRAG",
+                        tasks: [
+                            { id: "p4_t3", text: "Concept: Knowledge Graphs vs Vectors", type: "learn" },
+                            { id: "p4_t4", text: "Explore Neo4j or Microsoft GraphRAG", type: "code" },
+                            { id: "p4_t5", text: "Goal: Answer 'global' theme questions", type: "project" }
+                        ],
+                        insight: "GraphRAG connects entities across documents, answering questions that standard vector search misses."
+                    }
+                ]
+            },
+            phase5: {
+                title: "Phase 5: Capstone & Production",
+                days: "Days 39–45",
+                desc: "Building the portfolio piece: An Autonomous Data Analyst that writes and executes its own code.",
+                focus: ["Streamlit", "Pandas", "Matplotlib", "Sandboxing"],
+                sections: [
+                    {
+                        title: "Days 39-44: Capstone Project",
+                        tasks: [
+                            { id: "p5_t1", text: "Architect the 'AI Data Analyst'", type: "project" },
+                            { id: "p5_t2", text: "Implement Code Execution Node (Sandboxed)", type: "code" },
+                            { id: "p5_t3", text: "Implement Visualization Node", type: "code" },
+                            { id: "p5_t4", text: "Implement Self-Correction Loop", type: "code" }
+                        ],
+                        insight: "The ultimate test: Can your agent write code, see an error, fix the code, and try again without human help?"
+                    },
+                    {
+                        title: "Day 45: Packaging",
+                        tasks: [
+                            { id: "p5_t5", text: "Documentation & README", type: "project" },
+                            { id: "p5_t6", text: "Record Demo Video (Loom)", type: "project" }
+                        ],
+                        insight: "If you don't document it, you didn't build it."
+                    }
+                ]
+            }
+        };
+
+        const techStack = [
+            { category: "Language", tool: "Python 3.10+", reason: "The lingua franca of AI." },
+            { category: "Orchestration", tool: "LangGraph", reason: "Standard for looping agents." },
+            { category: "LLM Interface", tool: "OpenAI / Anthropic", reason: "Best reasoning capabilities." },
+            { category: "Vector DB", tool: "Pinecone / Weaviate", reason: "Managed memory/storage." },
+            { category: "Data Validation", tool: "Pydantic", reason: "Structured data enforcement." },
+            { category: "Evaluation", tool: "Ragas", reason: "Metrics-driven development." },
+            { category: "Frontend", tool: "Streamlit / Chainlit", reason: "Fast UI for AI apps." }
+        ];
+
+        // --- State Management ---
+        let completedTasks = new Set();
+        let currentView = 'dashboard';
+        let progressChartInstance = null;
+
+        // --- Init ---
+        document.addEventListener('DOMContentLoaded', () => {
+            router('dashboard');
+            document.getElementById('menuToggle').addEventListener('click', toggleMobileMenu);
+
+            // Mobile Menu Logic
+            function toggleMobileMenu() {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    sidebar.classList.remove('-translate-x-full');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            }
+        });
+
+        // --- Gemini API Logic ---
+
+        async function callGemini(prompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+
+            const maxRetries = 3;
+            let attempt = 0;
+
+            while (attempt < maxRetries) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 403 || response.status === 400) {
+                            throw new Error("Invalid Key. Please configure your API Access in the Hub (index.html).");
+                        }
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
+                } catch (error) {
+                    attempt++;
+                    console.warn(`Attempt ${attempt} failed:`, error);
+                    if (attempt >= maxRetries) {
+                        return `Error: Could not connect to Gemini AI. (${error.message})`;
+                    }
+                    // Exponential backoff
+                    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+                }
+            }
+        }
+
+        async function explainTask(taskText) {
+            openModal(`Mentorship: ${taskText}`);
+            const prompt = `
+                Act as a Senior Principal AI Engineer at a top tech company (OpenAI/Anthropic/Google). 
+                You are mentoring a junior engineer who is learning about: "${taskText}".
+                
+                Provide a structured explanation in Markdown that connects this concept to building real-world Agentic Hubs.
+
+                Structure:
+                ### 1. The "Why" (The Mental Model)
+                Explain *conceptually* what this is and why it replaced the old way of doing things. Use an analogy if helpful.
+
+                ### 2. The "How" (Implementation)
+                Provide a concise, modern Python code snippet (using Pydantic, LangChain, or simple API calls) showing how it works in practice.
+
+                ### 3. The "Gotcha" (Pro Tip)
+                What is a common mistake beginners make with this?
+
+                Keep the tone encouraging, high-agency, and technically precise.
+            `;
+
+            const response = await callGemini(prompt);
+            updateModalContent(response);
+        }
+
+        // --- Quiz State ---
+        let currentQuizData = null;
+        let userAnswers = {};
+
+        async function generateQuiz(phaseTitle, phaseDesc) {
+            openModal(`Skill Verification: ${phaseTitle}`);
+
+            // Loading message override
+            document.getElementById('aiModalBody').innerHTML = `
+                <div class="flex flex-col items-center justify-center py-12 space-y-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                    <p class="text-stone-500 font-medium">Generating a unique 5-Question Exam...</p>
+                    <p class="text-xs text-stone-400">Consulting Gemini 1.5 Flash</p>
+                </div>
+            `;
+
+            const prompt = `
+                Act as a strict AI Engineering Professor. Create a challenging 5-question Multiple Choice Quiz to test a student's deep understanding of: "${phaseTitle}".
+                
+                Context provided to student: "${phaseDesc}"
+
+                Output STRICT JSON ONLY. No markdown formatting, no backticks. The format must be exactly this array:
+                [
+                    {
+                        "id": 1,
+                        "question": "The question text?",
+                        "options": ["Option A", "Option B", "Option C", "Option D"],
+                        "correctAnswer": 0,
+                        "explanation": "Brief explanation of why this option is correct."
+                    }
+                ]
+                
+                Ensure the questions test *application* and *reasoning*, not just rote memorization.
+            `;
+
+            let response = await callGemini(prompt);
+
+            // Robust JSON Cleaning
+            try {
+                // Remove Markdown code blocks if present
+                response = response.replace(/```json/g, '').replace(/```/g, '').trim();
+                currentQuizData = JSON.parse(response);
+                userAnswers = {}; // Reset answers
+                renderQuiz();
+            } catch (e) {
+                console.error("Quiz Parse Error", e);
+                updateModalContent(`**Error generating quiz.** \n\nRaw Output:\n${response}\n\nPlease try again.`);
+            }
+        }
+
+        function renderQuiz() {
+            if (!currentQuizData) return;
+
+            let html = `<div class="space-y-8">`;
+
+            currentQuizData.forEach((q, index) => {
+                const isAnswered = userAnswers[index] !== undefined;
+                const isCorrect = isAnswered && userAnswers[index] === q.correctAnswer;
+
+                html += `
+                    <div class="bg-stone-50 rounded-xl p-5 border border-stone-200">
+                        <div class="flex items-start gap-3 mb-4">
+                            <span class="bg-stone-800 text-white text-xs font-bold px-2 py-1 rounded">Q${index + 1}</span>
+                            <h3 class="font-semibold text-stone-900 leading-snug">${q.question}</h3>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            ${q.options.map((opt, optIndex) => {
+                    let stateClass = "border-stone-200 bg-white hover:border-indigo-300";
+                    if (isAnswered) {
+                        if (optIndex === q.correctAnswer) stateClass = "correct border-emerald-500 bg-emerald-50";
+                        else if (optIndex === userAnswers[index]) stateClass = "wrong border-red-500 bg-red-50";
+                        else stateClass = "opacity-50 border-stone-100";
+                    } else if (userAnswers[index] === optIndex) {
+                        stateClass = "selected border-indigo-600 bg-indigo-50";
+                    }
+
+                    return `
+                                    <div onclick="selectAnswer(${index}, ${optIndex})" 
+                                         class="quiz-option p-3 rounded-lg border-2 text-sm text-stone-700 font-medium ${stateClass}">
+                                        ${opt}
+                                    </div>
+                                `;
+                }).join('')}
+                        </div>
+
+                        ${isAnswered ? `
+                            <div class="mt-4 text-sm quiz-explanation p-3 rounded bg-white border-l-4 ${isCorrect ? 'border-emerald-500' : 'border-red-500'}">
+                                <strong class="${isCorrect ? 'text-emerald-700' : 'text-red-700'}">${isCorrect ? 'Correct!' : 'Incorrect.'}</strong> 
+                                <span class="text-stone-600">${q.explanation}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            // Score Summary
+            const answeredCount = Object.keys(userAnswers).length;
+            if (answeredCount === currentQuizData.length) {
+                const score = Object.values(userAnswers).filter((ans, i) => ans === currentQuizData[i].correctAnswer).length;
+                html += `
+                    <div class="sticky bottom-0 bg-white p-4 border-t border-stone-200 text-center shadow-lg rounded-xl mb-4">
+                        <p class="text-lg font-bold text-stone-900">Final Score: <span class="text-indigo-600">${score}/${currentQuizData.length}</span></p>
+                        <button onclick="closeModal()" class="mt-2 text-sm text-stone-500 hover:text-stone-800 underline">Close Quiz</button>
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+            document.getElementById('aiModalBody').innerHTML = html;
+        }
+
+        function selectAnswer(qIndex, optIndex) {
+            // Prevent changing answer if already answered (optional, but good for scoring)
+            if (userAnswers[qIndex] !== undefined) return;
+
+            userAnswers[qIndex] = optIndex;
+            renderQuiz();
+        }
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('aiModal');
+        const modalContent = document.getElementById('aiModalContent');
+        const modalTitle = document.getElementById('aiModalTitle');
+        const modalBody = document.getElementById('aiModalBody');
+
+        function openModal(title) {
+            modalTitle.innerText = title;
+            // Reset to loading state
+            modalBody.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-12 space-y-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                    <p class="text-stone-500 animate-pulse">Consulting the AI Neural Net...</p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            // Trigger animation
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function updateModalContent(markdownText) {
+            modalBody.innerHTML = `<div class="prose prose-stone max-w-none text-sm">${marked.parse(markdownText)}</div>`;
+        }
+
+        // Close modal on click outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+
+        // --- Router ---
+        function router(viewName) {
+            currentView = viewName;
+
+            // Update Sidebar Active State
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.dataset.target === viewName) {
+                    btn.classList.add('bg-stone-100', 'text-indigo-600');
+                    btn.classList.remove('text-stone-600');
+                } else {
+                    btn.classList.remove('bg-stone-100', 'text-indigo-600');
+                    btn.classList.add('text-stone-600');
+                }
+            });
+
+            // Close mobile menu if open
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+            }
+
+            const content = document.getElementById('content');
+            content.innerHTML = ''; // Clear content
+
+            if (viewName === 'dashboard') {
+                renderDashboard(content);
+            } else if (viewName.startsWith('phase')) {
+                renderPhase(content, phases[viewName], viewName);
+            } else if (viewName === 'techstack') {
+                renderTechStack(content);
+            }
+
+            // Always update progress chart in sidebar
+            updateSidebarProgress();
+        }
+
+        // --- Views ---
+
+        function renderDashboard(container) {
+            container.innerHTML = `
+                <div class="space-y-8 fade-in">
+                    <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-8">
+                        <h2 class="text-3xl font-bold text-stone-900 mb-4">Welcome, Future Architect.</h2>
+                        <p class="text-stone-600 text-lg leading-relaxed max-w-3xl">
+                            This 45-day roadmap is designed to transform you from a script-writer into an 
+                            <span class="font-semibold text-indigo-600">AI Solutions Architect</span>. 
+                            The market in 2026 demands more than just prompt engineering; it demands 
+                            system design, structured data handling, and autonomous agent orchestration.
+                        </p>
+                        <div class="mt-8 flex flex-wrap gap-4">
+                            <button onclick="router('phase1')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-sm">
+                                Start Phase 1
+                            </button>
+                            <button onclick="router('techstack')" class="bg-white border border-stone-300 hover:bg-stone-50 text-stone-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                                View Tech Stack
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Skill Profile Chart -->
+                        <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 flex flex-col">
+                            <h3 class="text-lg font-bold text-stone-900 mb-4">Target Skill Profile (2026)</h3>
+                            <div class="chart-container flex-grow">
+                                <canvas id="skillRadar"></canvas>
+                            </div>
+                            <p class="text-sm text-stone-500 mt-4 text-center">Shift from pure coding to architectural reasoning.</p>
+                        </div>
+
+                        <!-- Roadmap Summary -->
+                        <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                            <h3 class="text-lg font-bold text-stone-900 mb-6">The 45-Day Sprint</h3>
+                            <div class="relative border-l-2 border-stone-200 ml-3 space-y-8 pb-2">
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-[9px] top-1 w-4 h-4 bg-indigo-600 rounded-full border-2 border-white"></div>
+                                    <h4 class="font-bold text-stone-900">Foundation</h4>
+                                    <p class="text-sm text-stone-500">Days 1-10: Pydantic, Vectors, APIs</p>
+                                </div>
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-[9px] top-1 w-4 h-4 bg-indigo-400 rounded-full border-2 border-white"></div>
+                                    <h4 class="font-bold text-stone-900">Data Pipeline (RAG)</h4>
+                                    <p class="text-sm text-stone-500">Days 11-20: Retrieval, Re-ranking, Eval</p>
+                                </div>
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-[9px] top-1 w-4 h-4 bg-indigo-300 rounded-full border-2 border-white"></div>
+                                    <h4 class="font-bold text-stone-900">Agentic Shift</h4>
+                                    <p class="text-sm text-stone-500">Days 21-30: LangGraph, Tools, Loops</p>
+                                </div>
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-[9px] top-1 w-4 h-4 bg-indigo-200 rounded-full border-2 border-white"></div>
+                                    <h4 class="font-bold text-stone-900">Advanced Architecture</h4>
+                                    <p class="text-sm text-stone-500">Days 31-38: Multi-Agent Systems</p>
+                                </div>
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-[9px] top-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"></div>
+                                    <h4 class="font-bold text-stone-900">Capstone Project</h4>
+                                    <p class="text-sm text-stone-500">Days 39-45: The AI Data Analyst</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            initRadarChart();
+        }
+
+        function renderPhase(container, data, phaseKey) {
+            container.innerHTML = `
+                <div class="space-y-6 fade-in">
+                    <!-- Header -->
+                    <div class="border-b border-stone-200 pb-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <div class="flex items-center space-x-2 text-indigo-600 font-mono text-sm font-bold uppercase tracking-wider mb-2">
+                                    <span>${data.days}</span>
+                                    <span>&bull;</span>
+                                    <span>${data.focus.join(' / ')}</span>
+                                </div>
+                                <h2 class="text-3xl font-bold text-stone-900 mb-3">${data.title}</h2>
+                                <p class="text-lg text-stone-600 max-w-4xl">${data.desc}</p>
+                            </div>
+                            <button onclick="generateQuiz('${data.title}', '${data.desc.replace(/'/g, "\\'")}')" 
+                                class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all font-medium whitespace-nowrap">
+                                <span>✨ Quiz Me</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Architecture Diagram (Specific for Phase 4 & 5) -->
+                    ${(phaseKey === 'phase4' || phaseKey === 'phase5') ? renderArchitectureDiagram(phaseKey) : ''}
+
+                    <!-- Daily Tasks Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        ${data.sections.map(section => `
+                            <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden flex flex-col">
+                                <div class="bg-stone-50 px-6 py-4 border-b border-stone-100">
+                                    <h3 class="font-bold text-stone-800">${section.title}</h3>
+                                </div>
+                                <div class="p-6 flex-1">
+                                    <div class="mb-4 bg-indigo-50 text-indigo-800 text-sm p-3 rounded-lg border border-indigo-100">
+                                        <strong>💡 Insight:</strong> ${section.insight}
+                                    </div>
+                                    <ul class="space-y-3">
+                                        ${section.tasks.map(task => `
+                                            <li class="flex items-start group justify-between">
+                                                <div class="flex items-start">
+                                                    <div class="flex items-center h-5 mt-0.5">
+                                                        <input id="${task.id}" type="checkbox" 
+                                                            class="h-4 w-4 text-indigo-600 border-stone-300 rounded focus:ring-indigo-500 cursor-pointer"
+                                                            ${completedTasks.has(task.id) ? 'checked' : ''}
+                                                            onchange="toggleTask('${task.id}')">
+                                                    </div>
+                                                    <div class="ml-3 text-sm">
+                                                        <label for="${task.id}" class="font-medium text-stone-700 group-hover:text-indigo-700 cursor-pointer transition-colors">
+                                                            ${task.text}
+                                                        </label>
+                                                        <span class="block text-xs text-stone-400 mt-0.5 capitalize">${task.type}</span>
+                                                    </div>
+                                                </div>
+                                                <button onclick="explainTask('${task.text.replace(/'/g, "\\'")}')" class="ml-2 text-indigo-400 hover:text-indigo-600 opacity-50 group-hover:opacity-100 transition-opacity text-xs border border-indigo-100 hover:bg-indigo-50 px-2 py-1 rounded">
+                                                    ✨ Explain
+                                                </button>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Re-bind architecture interactions if they exist
+            if (phaseKey === 'phase5') bindArchInteractions('capstone');
+            if (phaseKey === 'phase4') bindArchInteractions('devteam');
+        }
+
+        function renderTechStack(container) {
+            container.innerHTML = `
+                <div class="space-y-6 fade-in">
+                    <div class="border-b border-stone-200 pb-6">
+                        <h2 class="text-3xl font-bold text-stone-900 mb-3">The 2026 Tech Stack</h2>
+                        <p class="text-lg text-stone-600">This is the modern toolkit. Learn these, and ignore the legacy noise.</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-stone-200">
+                                <thead class="bg-stone-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Category</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Tool</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase tracking-wider">Why?</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-stone-200">
+                                    ${techStack.map(item => `
+                                        <tr class="hover:bg-stone-50 transition-colors">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-900">${item.category}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-indigo-600 font-mono">${item.tool}</td>
+                                            <td class="px-6 py-4 text-sm text-stone-600">${item.reason}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- Helper: Architecture Diagrams (HTML/CSS) ---
+        function renderArchitectureDiagram(type) {
+            if (type === 'phase5') {
+                return `
+                <div class="bg-stone-900 rounded-xl p-6 text-white shadow-lg mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-white border-b border-stone-700 pb-2">Architecture: The AI Data Analyst</h3>
+                    <p class="text-stone-400 text-sm mb-6">Click on the nodes below to understand the agent flow.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+                        <!-- Arrows (Visual only, simple positioning) -->
+                        <div class="hidden md:block absolute top-1/2 left-[18%] w-[5%] border-t-2 border-stone-600"></div>
+                        <div class="hidden md:block absolute top-1/2 left-[38%] w-[5%] border-t-2 border-stone-600"></div>
+                        <div class="hidden md:block absolute top-1/2 left-[58%] w-[5%] border-t-2 border-stone-600"></div>
+                        <div class="hidden md:block absolute top-1/2 left-[78%] w-[5%] border-t-2 border-stone-600"></div>
+
+                        <!-- Nodes -->
+                        <div class="node active bg-indigo-900 border border-indigo-500 p-4 rounded-lg text-center" data-role="planner">
+                            <div class="text-2xl mb-2">🧠</div>
+                            <div class="font-bold text-sm">Planner</div>
+                        </div>
+                        <div class="node bg-stone-800 border border-stone-600 p-4 rounded-lg text-center hover:bg-stone-700" data-role="coder">
+                            <div class="text-2xl mb-2">💻</div>
+                            <div class="font-bold text-sm">Code Exec</div>
+                        </div>
+                        <div class="node bg-stone-800 border border-stone-600 p-4 rounded-lg text-center hover:bg-stone-700" data-role="viz">
+                            <div class="text-2xl mb-2">📊</div>
+                            <div class="font-bold text-sm">Visualizer</div>
+                        </div>
+                        <div class="node bg-stone-800 border border-stone-600 p-4 rounded-lg text-center hover:bg-stone-700" data-role="report">
+                            <div class="text-2xl mb-2">📝</div>
+                            <div class="font-bold text-sm">Reporter</div>
+                        </div>
+                        <div class="node bg-stone-800 border border-stone-600 p-4 rounded-lg text-center hover:bg-stone-700" data-role="fix">
+                            <div class="text-2xl mb-2">🔄</div>
+                            <div class="font-bold text-sm">Self-Correct</div>
+                        </div>
+                    </div>
+                    
+                    <div id="arch-desc" class="mt-6 bg-stone-800 p-4 rounded border-l-4 border-indigo-500 text-stone-300 text-sm h-24 transition-all">
+                        <strong>Planner Node:</strong> Breaks down complex user requests (e.g., "Analyze Q3 trends") into step-by-step logical instructions.
+                    </div>
+                </div>`;
+            } else if (type === 'phase4') {
+                return `
+                <div class="bg-stone-900 rounded-xl p-6 text-white shadow-lg mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-white border-b border-stone-700 pb-2">Architecture: Supervisor Pattern</h3>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-6 relative">
+                         <!-- Supervisor -->
+                        <div class="node bg-indigo-900 border-2 border-indigo-500 p-4 rounded-lg text-center w-40 z-10" data-role="supervisor">
+                            <div class="text-3xl mb-1">👀</div>
+                            <div class="font-bold">Supervisor</div>
+                        </div>
+
+                        <!-- Workers -->
+                        <div class="flex flex-col gap-4 border-l-2 border-stone-600 pl-6 py-2">
+                             <div class="node bg-stone-800 border border-stone-600 p-3 rounded-lg flex items-center gap-3 w-48 hover:bg-stone-700" data-role="worker_code">
+                                <span>👨‍💻</span> <span class="text-sm font-bold">Coder Agent</span>
+                             </div>
+                             <div class="node bg-stone-800 border border-stone-600 p-3 rounded-lg flex items-center gap-3 w-48 hover:bg-stone-700" data-role="worker_review">
+                                <span>🔍</span> <span class="text-sm font-bold">Reviewer Agent</span>
+                             </div>
+                        </div>
+                    </div>
+                    <div id="arch-desc-p4" class="mt-6 bg-stone-800 p-4 rounded border-l-4 border-indigo-500 text-stone-300 text-sm h-20 transition-all">
+                         <strong>Supervisor:</strong> Acts as the router and manager. It decides which specialized agent works next based on the current state.
+                    </div>
+                </div>`;
+            }
+            return '';
+        }
+
+        // --- Interaction Logic for Diagrams ---
+        function bindArchInteractions(context) {
+            const nodes = document.querySelectorAll('.node');
+            const descBox = context === 'capstone' ? document.getElementById('arch-desc') : document.getElementById('arch-desc-p4');
+
+            const descriptions = {
+                'planner': "<strong>Planner Node:</strong> Breaks down complex user requests into step-by-step logical instructions (e.g., 'Filter by Date', 'Sum Revenue').",
+                'coder': "<strong>Code Execution Node:</strong> Writes valid Pandas code and executes it in a sandboxed environment to ensure safety.",
+                'viz': "<strong>Visualization Node:</strong> Uses Matplotlib or Plotly to generate charts based on the data frame resulting from the code node.",
+                'report': "<strong>Reporting Node:</strong> Synthesizes the raw data and charts into a natural language summary for the user.",
+                'fix': "<strong>Self-Correction Loop:</strong> If the code errors, this agent reads the traceback, modifies the script, and re-submits it automatically.",
+                'supervisor': "<strong>Supervisor:</strong> The brain. It maintains the conversation state and decides 'Who speaks next?'. It routes tasks to Coder or Reviewer.",
+                'worker_code': "<strong>Coder Agent:</strong> A specialist LLM prompt designed strictly for writing Python code. It does not chat, it just codes.",
+                'worker_review': "<strong>Reviewer Agent:</strong> Analyzes the Coder's output for bugs or security flaws before executing."
+            };
+
+            nodes.forEach(node => {
+                node.addEventListener('click', () => {
+                    // Remove active class from all
+                    nodes.forEach(n => {
+                        n.classList.remove('active', 'bg-indigo-900', 'border-indigo-500');
+                        n.classList.add('bg-stone-800', 'border-stone-600');
+                    });
+
+                    // Add active class to clicked
+                    node.classList.remove('bg-stone-800', 'border-stone-600');
+                    node.classList.add('active', 'bg-indigo-900', 'border-indigo-500');
+
+                    // Update text
+                    const role = node.dataset.role;
+                    descBox.innerHTML = descriptions[role];
+                });
+            });
+        }
+
+        // --- Logic: Task Toggling ---
+        function toggleTask(id) {
+            if (completedTasks.has(id)) {
+                completedTasks.delete(id);
+            } else {
+                completedTasks.add(id);
+            }
+            updateSidebarProgress();
+        }
+
+        function updateSidebarProgress() {
+            // Count total tasks (flat list from phases)
+            let totalTasks = 0;
+            Object.values(phases).forEach(p => {
+                p.sections.forEach(s => {
+                    totalTasks += s.tasks.length;
+                });
+            });
+
+            const completed = completedTasks.size;
+            const percentage = Math.round((completed / totalTasks) * 100);
+
+            // Update Text
+            document.getElementById('progressText').innerText = `${percentage}%`;
+
+            // Update Chart
+            if (!progressChartInstance) {
+                const ctx = document.getElementById('progressChart').getContext('2d');
+                progressChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Done', 'Remaining'],
+                        datasets: [{
+                            data: [0, 100],
+                            backgroundColor: ['#4f46e5', '#e7e5e4'],
+                            borderWidth: 0,
+                            cutout: '75%'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                        animation: { animateScale: true, animateRotate: true }
+                    }
+                });
+            }
+
+            progressChartInstance.data.datasets[0].data = [percentage, 100 - percentage];
+            progressChartInstance.update();
+        }
+
+        // --- Logic: Radar Chart ---
+        function initRadarChart() {
+            const ctx = document.getElementById('skillRadar').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Python Logic', 'Architecture', 'Prompting', 'Data/Vector Ops', 'DevOps/Deploy'],
+                    datasets: [{
+                        label: 'Target Profile (2026)',
+                        data: [90, 95, 70, 85, 60],
+                        fill: true,
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                        borderColor: '#4f46e5',
+                        pointBackgroundColor: '#4f46e5',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#4f46e5'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e5e7eb' },
+                            grid: { color: '#e5e7eb' },
+                            pointLabels: {
+                                font: { size: 12, family: "'Inter', sans-serif" },
+                                color: '#4b5563'
+                            },
+                            ticks: { display: false, backdropColor: 'transparent' },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

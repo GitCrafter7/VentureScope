@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VentureScope | Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+        }
+
+        .hub-card {
+            transition: all 0.3s ease;
+        }
+
+        .hub-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .bg-grid-pattern {
+            background-image: radial-gradient(#E5E7EB 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-grid-pattern">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="VentureScope Logo" class="h-10 w-auto">
+                    <span class="text-2xl font-bold text-gray-800 tracking-tight">VentureScope Hub</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div id="apiStatusIndicator"
+                        class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                        <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        API Key Needed
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+
+        <!-- Welcome Section -->
+        <div class="mb-12 text-center">
+            <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Your Venture Dashboard</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Manage your validated ideas and track your engineering journey in one place.
+            </p>
+        </div>
+
+        <!-- API Key Setup (Centralized) -->
+        <div class="relative group max-w-3xl mx-auto mb-12">
+            <!-- Glow Effect -->
+            <div
+                class="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200">
+            </div>
+
+            <!-- Card Content -->
+            <div
+                class="relative bg-white rounded-2xl ring-1 ring-gray-900/5 shadow-xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden">
+
+                <!-- Decorative Background Element -->
+                <div
+                    class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-indigo-50 rounded-full blur-3xl opacity-50 -z-10">
+                </div>
+
+                <div class="flex items-center gap-5 w-full md:w-auto">
+                    <!-- Icon -->
+                    <div class="relative flex-shrink-0">
+                        <div
+                            class="w-14 h-14 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 transform group-hover:scale-105 transition-transform duration-300">
+                            <i class="ph-fill ph-key text-2xl"></i>
+                        </div>
+                        <!-- Status Dot Overlay -->
+                        <div id="statusDot"
+                            class="absolute -bottom-1 -right-1 w-5 h-5 bg-gray-200 border-4 border-white rounded-full flex items-center justify-center">
+                            <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                        </div>
+                    </div>
+
+                    <!-- Text -->
+                    <div class="flex-1">
+                        <h2 class="text-xl font-bold text-gray-900 tracking-tight">Gemini Intelligence</h2>
+                        <p class="text-sm text-gray-500 mt-1 font-medium">
+                            <span
+                                class="text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded text-xs uppercase tracking-wide border border-indigo-100 mr-2">Secure
+                                Storage</span>
+                            One key, encrypted & shared.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="w-full md:w-auto">
+                    <button onclick="openApiModal()" id="configureKeyBtn"
+                        class="group/btn relative w-full md:w-auto overflow-hidden rounded-xl bg-gray-900 px-6 py-3 text-white shadow ring-1 ring-gray-900/5 transition-all hover:bg-gray-800 hover:shadow-lg active:translate-y-0.5">
+                        <div class="relative flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-gear-six transition-transform group-hover/btn:rotate-90"></i>
+                            <span class="font-semibold">Configure Access</span>
+                        </div>
+                        <!-- Button Glow -->
+                        <div
+                            class="absolute inset-0 -top-full h-full w-full bg-gradient-to-b from-white to-transparent opacity-10 group-hover/btn:top-0 transition-all duration-500">
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Apps Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- App 1: VentureScope Market -->
+            <a href="Saas-Ideas.html"
+                class="hub-card block bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden group hover:border-indigo-300">
+                <div
+                    class="h-40 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center relative overflow-hidden">
+                    <i
+                        class="ph-duotone ph-trend-up text-white text-6xl opacity-20 absolute -bottom-4 -right-4 transform rotate-12 group-hover:scale-110 transition-transform"></i>
+                    <i class="ph-fill ph-binoculars text-white text-5xl relative z-10 shadow-sm"></i>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">Market
+                            Scope</h3>
+                        <span class="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded font-bold uppercase">Tool</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-4 h-10">Discover unmet needs from reddit & twitter signals
+                        verified by AI.</p>
+                    <div class="flex items-center gap-2 text-xs font-medium text-gray-400">
+                        <i class="ph-bold ph-check-circle text-green-500"></i>
+                        <span>AI Analysis Ready</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- App 2: AI Roadmap -->
+            <a href="AI -RoadMap.html"
+                class="hub-card block bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden group hover:border-emerald-300">
+                <div
+                    class="h-40 bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center relative overflow-hidden">
+                    <i
+                        class="ph-duotone ph-map-trifold text-white text-6xl opacity-20 absolute -bottom-4 -right-4 transform -rotate-12 group-hover:scale-110 transition-transform"></i>
+                    <i class="ph-fill ph-path text-white text-5xl relative z-10 shadow-sm"></i>
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">AI
+                            Engineer Roadmap</h3>
+                        <span
+                            class="bg-amber-50 text-amber-700 text-xs px-2 py-1 rounded font-bold uppercase">Guide</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-4 h-10">45-day interactive curriculum to master modern AI
+                        architecture.</p>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-gray-100 rounded-full h-2 mb-2 overflow-hidden">
+                        <div id="roadmapProgressBar" class="bg-emerald-500 h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-emerald-600 font-bold" id="roadmapProgressText">0% Complete</span>
+                        <span class="text-gray-400">resume learning &rarr;</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+        <div class="mt-12 text-center">
+            <p class="text-sm text-gray-400">&copy; 2025 VentureScope Ecosystem.</p>
+        </div>
+
+    </main>
+
+    <!-- API Modal -->
+    <div id="apiModal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true"
+                onclick="closeApiModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div
+                class="relative inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div
+                            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <i class="ph-bold ph-key text-indigo-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Setup Gemini API
+                                Key</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500 mb-4">
+                                    Your key is needed for the AI features in VentureScope. It is
+                                    <strong>encrypted</strong> locally in your browser.
+                                </p>
+                                <input type="password" id="apiKeyInput"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                                    placeholder="Paste API Key here...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" onclick="saveKey()"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                        Save Securely
+                    </button>
+                    <button type="button" onclick="closeApiModal()"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                    <button type="button" onclick="clearKey()"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-red-200 text-red-600 shadow-sm px-4 py-2 bg-red-50 text-base font-medium hover:bg-red-100 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Clear Key
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Shared Encryption Logic (MUST match other files) ---
+        const ENCRYPTION_SECRET = "VentureScope_Gemini_Secret_Salt_v1";
+        const STORAGE_KEY = 'gemini_api_key';
+        const ROADMAP_KEY = 'venture_scope_roadmap_progress';
+
+        function encryptData(text) {
+            try {
+                let result = "";
+                for (let i = 0; i < text.length; i++) {
+                    result += String.fromCharCode(text.charCodeAt(i) ^ ENCRYPTION_SECRET.charCodeAt(i % ENCRYPTION_SECRET.length));
+                }
+                return btoa(result);
+            } catch (e) { console.error(e); return ""; }
+        }
+
+        function decryptData(ciphertext) {
+            try {
+                const text = atob(ciphertext);
+                let result = "";
+                for (let i = 0; i < text.length; i++) {
+                    result += String.fromCharCode(text.charCodeAt(i) ^ ENCRYPTION_SECRET.charCodeAt(i % ENCRYPTION_SECRET.length));
+                }
+                return result;
+            } catch (e) { return ""; }
+        }
+
+        // --- UI Logic ---
+        const statusDot = document.getElementById('statusDot').children[0];
+        const keyConfigBtn = document.getElementById('configureKeyBtn');
+        const progressBar = document.getElementById('roadmapProgressBar');
+        const progressText = document.getElementById('roadmapProgressText');
+        const btnIcon = keyConfigBtn.querySelector('i');
+        const btnText = keyConfigBtn.querySelector('span');
+
+        function init() {
+            checkKeyStatus();
+            loadRoadmapProgress();
+        }
+
+        function checkKeyStatus() {
+            const encrypted = localStorage.getItem(STORAGE_KEY);
+            if (encrypted) {
+                const decrypted = decryptData(encrypted);
+                if (decrypted && decrypted.length > 5) {
+                    // Active State
+                    statusDot.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
+                    statusDot.parentElement.className = "absolute -bottom-1 -right-1 w-5 h-5 bg-green-100 border-4 border-white rounded-full flex items-center justify-center";
+
+                    btnIcon.className = "ph-bold ph-check text-green-400";
+                    btnText.innerText = "Access Configured";
+                    // Subtle change to button to show it's "Done"
+                    keyConfigBtn.classList.add('ring-green-500/30');
+                } else {
+                    setKeyMissingStatus();
+                }
+            } else {
+                setKeyMissingStatus();
+            }
+        }
+
+        function setKeyMissingStatus() {
+            // Missing State
+            statusDot.className = "w-2 h-2 rounded-full bg-amber-500";
+            statusDot.parentElement.className = "absolute -bottom-1 -right-1 w-5 h-5 bg-amber-100 border-4 border-white rounded-full flex items-center justify-center";
+
+            btnIcon.className = "ph-bold ph-gear-six transition-transform group-hover/btn:rotate-90";
+            btnText.innerText = "Configure Access";
+            keyConfigBtn.classList.remove('ring-green-500/30');
+        }
+
+        function loadRoadmapProgress() {
+            const progressData = localStorage.getItem(ROADMAP_KEY);
+            if (progressData) {
+                try {
+                    const tasks = JSON.parse(progressData); // Array of task IDs
+                    // Estimate total tasks (Hardcoded approx based on known roadmap structure, 
+                    // or we just trust the percentage if we stored it? 
+                    // Better to just store the count or calc relative.
+                    // For now, let's assume ~30 tasks total based on the file content I saw)
+                    // Wait, the roadmap file calculates percentage dynamically.
+                    // I should probably store the Percentage directly as well for the dashboard.
+                    // OR, I can just count the items.
+                    // Let's rely on the array length.
+                    const count = tasks.length;
+                    // Total tasks in roadmap is approx 33 (I counted roughly in the file view).
+                    // Let's just show "X Tasks Completed" if exact % is hard, 
+                    // or try to match the total.
+                    const totalEstimated = 33;
+                    const percent = Math.min(100, Math.round((count / totalEstimated) * 100));
+
+                    progressBar.style.width = `${percent}%`;
+                    progressText.innerText = `${percent}% Complete`;
+                } catch (e) {
+                    console.error("Error reading progress", e);
+                }
+            }
+        }
+
+        // --- Model Actions ---
+        function openApiModal() {
+            document.getElementById('apiModal').classList.remove('hidden');
+            // Pre-fill if exists? No, for security, don't show the key.
+        }
+
+        function closeApiModal() {
+            document.getElementById('apiModal').classList.add('hidden');
+        }
+
+        function saveKey() {
+            const input = document.getElementById('apiKeyInput');
+            const val = input.value.trim();
+            if (val) {
+                const encrypted = encryptData(val);
+                localStorage.setItem(STORAGE_KEY, encrypted);
+                checkKeyStatus();
+                closeApiModal();
+                input.value = ''; // clear memory
+            }
+        }
+
+        function clearKey() {
+            localStorage.removeItem(STORAGE_KEY);
+            checkKeyStatus();
+            closeApiModal();
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+
+</html>

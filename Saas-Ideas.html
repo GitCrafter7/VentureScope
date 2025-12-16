@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VentureScope | Uncovering Unmet Needs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #1F2937;
+        }
+
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .card-shadow:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            transform: translateY(-2px);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            height: 300px;
+        }
+
+        .hidden-content {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Toggle Switch Styling */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #4F46E5;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #4F46E5;
+        }
+
+        /* Background Pattern for Infographic feel */
+        .bg-grid-pattern {
+            background-image: radial-gradient(#E5E7EB 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .step-connector::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 100%;
+            height: 2px;
+            background: #E5E7EB;
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .last-step::after {
+            display: none;
+        }
+
+        /* Modal Animation */
+        .modal-enter {
+            animation: modalIn 0.3s ease-out forwards;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Shimmer Effect for Loading */
+        .shimmer {
+            background: linear-gradient(to right, #f3f4f6 0%, #edeef1 20%, #f3f4f6 40%, #f3f4f6 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite linear;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#FDFBF7] min-h-screen flex flex-col relative">
+
+    <!-- AI Insights Modal -->
+    <div id="aiModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true"
+                onclick="closeModal()"></div>
+
+            <!-- Modal Panel -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div
+                class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl w-full modal-enter">
+
+                <!-- Modal Header -->
+                <div class="bg-indigo-600 px-4 py-4 sm:px-6 flex justify-between items-center">
+                    <h3 class="text-lg leading-6 font-bold text-white flex items-center gap-2" id="modal-title">
+                        <i class="ph-fill ph-sparkle"></i> <span id="modal-heading">AI Analysis</span>
+                    </h3>
+                    <button type="button" class="text-indigo-200 hover:text-white focus:outline-none"
+                        onclick="closeModal()">
+                        <i class="ph-bold ph-x text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Modal Content -->
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                    <div id="loadingState" class="hidden space-y-4 py-8">
+                        <div class="flex flex-col items-center justify-center">
+                            <i class="ph-duotone ph-spinner animate-spin text-4xl text-indigo-500 mb-4"></i>
+                            <p class="text-gray-500 font-medium animate-pulse">Consulting Gemini...</p>
+                        </div>
+                        <div class="h-2 bg-gray-100 rounded shimmer w-3/4 mx-auto"></div>
+                        <div class="h-2 bg-gray-100 rounded shimmer w-1/2 mx-auto"></div>
+                        <div class="h-2 bg-gray-100 rounded shimmer w-2/3 mx-auto"></div>
+                    </div>
+
+                    <div id="aiResponseContent" class="hidden">
+                        <!-- Dynamic Content Here -->
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-gray-100">
+                    <button type="button"
+                        class="mt-3 w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                        onclick="closeModal()">
+                        Close
+                    </button>
+                    <button type="button"
+                        class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition-colors"
+                        onclick="copyToClipboard()">
+                        <i class="ph-bold ph-copy mr-2"></i> Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Key Modal -->
+    <div id="apiKeyModal" class="fixed inset-0 z-[110] hidden overflow-y-auto" aria-labelledby="modal-title"
+        role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+            <!-- Modal Panel -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div
+                class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full modal-enter">
+
+                <!-- Modal Header -->
+                <div class="bg-indigo-600 px-4 py-4 sm:px-6">
+                    <h3 class="text-lg leading-6 font-bold text-white flex items-center gap-2">
+                        <i class="ph-fill ph-key"></i> <span>Setup Gemini API</span>
+                    </h3>
+                </div>
+
+                <!-- Modal Content -->
+                <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <p class="text-sm text-gray-500 mb-4">
+                        To enable AI analysis features, please enter your Gemini API Key. It will be
+                        <strong>encrypted</strong> and stored securely in
+                        your browser's local storage.
+                    </p>
+                    <div class="space-y-2">
+                        <label for="apiKeyInput" class="block text-sm font-medium text-gray-700">API Key</label>
+                        <input type="password" id="apiKeyInput"
+                            class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow shadow-sm"
+                            placeholder="Paste your API key here...">
+                        <p class="text-xs text-gray-500">
+                            Need a key? <a href="https://aistudio.google.com/app/apikey" target="_blank"
+                                class="text-indigo-600 hover:text-indigo-800 font-medium hover:underline">Get it from
+                                Google AI Studio</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse border-t border-gray-100">
+                    <button type="button" onclick="saveApiKey()"
+                        class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                        Save & Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <img src="logo.png" alt="VentureScope Logo" class="h-10 w-auto">
+                    <span class="text-2xl font-bold text-gray-800 tracking-tight">VentureScope</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="analyzeMarketSignals()"
+                        class="hidden md:flex bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:shadow-lg transition-all items-center gap-1.5 transform hover:scale-105">
+                        <i class="ph-fill ph-sparkle"></i> Analyze Market
+                    </button>
+                    <button
+                        class="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium border border-indigo-100 flex items-center gap-1">
+                        <i class="ph-bold ph-file-text"></i> v1.0 Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- Intro Section -->
+        <div class="mb-12 text-center max-w-3xl mx-auto">
+            <div
+                class="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide mb-4">
+                <i class="ph-fill ph-trend-up"></i> Live Market Research
+            </div>
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">VentureScope: <br
+                    class="hidden md:block" />Scope the Market. Build the Future.</h1>
+            <p class="text-lg text-gray-600 leading-relaxed">
+                We filter the static of social media to find clear signals of unmet needs.
+                Below is a curated analysis of 10 unique problems that software could solve.
+            </p>
+            <button onclick="analyzeMarketSignals()"
+                class="mt-6 md:hidden w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-md flex justify-center items-center gap-2">
+                <i class="ph-fill ph-sparkle"></i> Analyze Current Signals with Gemini
+            </button>
+        </div>
+
+        <!-- VISUAL INFOGRAPHIC: The Methodology -->
+        <div
+            class="mb-16 py-10 px-4 bg-white rounded-2xl border border-gray-200 shadow-sm bg-grid-pattern relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+            </div>
+            <div class="text-center mb-8">
+                <h2 class="text-xl font-bold text-gray-900">The Discovery Lifecycle</h2>
+                <p class="text-sm text-gray-500">How we identify high-value opportunities</p>
+            </div>
+
+            <div
+                class="flex flex-col md:flex-row justify-between items-center max-w-4xl mx-auto relative z-10 gap-8 md:gap-0">
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center relative w-full md:w-1/3 step-connector">
+                    <div
+                        class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4 border border-blue-100 shadow-sm z-10 relative">
+                        <i class="ph-duotone ph-ear text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900">1. Listen</h3>
+                    <p class="text-xs text-center text-gray-500 max-w-[150px]">Scanning active threads on Reddit & X for
+                        "I hate..." or "How do I..."</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center relative w-full md:w-1/3 step-connector">
+                    <div
+                        class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-4 border border-purple-100 shadow-sm z-10 relative">
+                        <i class="ph-duotone ph-funnel text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900">2. Filter</h3>
+                    <p class="text-xs text-center text-gray-500 max-w-[150px]">Removing noise to find recurring,
+                        solvable pain points.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center relative w-full md:w-1/3 last-step">
+                    <div
+                        class="w-16 h-16 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-4 border border-green-100 shadow-sm z-10 relative">
+                        <i class="ph-duotone ph-lightbulb text-3xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900">3. Solve</h3>
+                    <p class="text-xs text-center text-gray-500 max-w-[150px]">Mapping software features to specific
+                        user frustrations.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <!-- Category Chart -->
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <div class="mb-4 border-b border-gray-100 pb-2">
+                    <h2 class="text-lg font-semibold text-gray-800">Pain Points by Category</h2>
+                    <p class="text-sm text-gray-500">Distribution of the 10 identified issues</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+            <!-- Platform Chart -->
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <div class="mb-4 border-b border-gray-100 pb-2">
+                    <h2 class="text-lg font-semibold text-gray-800">Source Platform</h2>
+                    <p class="text-sm text-gray-500">Where the discussions are happening</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="platformChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls & Filters -->
+        <div
+            class="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-4 rounded-xl border border-gray-200 shadow-sm sticky top-20 z-40 bg-opacity-95 backdrop-blur-sm">
+            <!-- Filter Buttons -->
+            <div class="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto no-scrollbar" id="filterContainer">
+                <button onclick="filterCards('all')"
+                    class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium bg-gray-900 text-white transition-colors flex items-center gap-2"
+                    data-filter="all">
+                    <i class="ph-bold ph-squares-four"></i> All
+                </button>
+                <button onclick="filterCards('Productivity')"
+                    class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors flex items-center gap-2"
+                    data-filter="Productivity">
+                    <i class="ph-bold ph-lightning"></i> Productivity
+                </button>
+                <button onclick="filterCards('Finance')"
+                    class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors flex items-center gap-2"
+                    data-filter="Finance">
+                    <i class="ph-bold ph-currency-dollar"></i> Finance
+                </button>
+                <button onclick="filterCards('Lifestyle')"
+                    class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors flex items-center gap-2"
+                    data-filter="Lifestyle">
+                    <i class="ph-bold ph-coffee"></i> Lifestyle
+                </button>
+                <button onclick="filterCards('B2B')"
+                    class="filter-btn px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors flex items-center gap-2"
+                    data-filter="B2B">
+                    <i class="ph-bold ph-briefcase"></i> B2B/SaaS
+                </button>
+            </div>
+
+            <!-- Solution Mode Toggle -->
+            <div class="flex items-center mt-4 md:mt-0 bg-indigo-50 px-4 py-2 rounded-lg border border-indigo-100">
+                <i class="ph-fill ph-magic-wand text-indigo-600 mr-2"></i>
+                <span class="mr-3 text-sm font-bold text-indigo-900">Reveal Solutions</span>
+                <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" name="toggle" id="solutionToggle"
+                        class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 transition-all duration-300" />
+                    <label for="solutionToggle"
+                        class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-300"></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problems Grid -->
+        <div id="cardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards will be injected here via JS -->
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-500 text-sm">Generated Analysis based on Reddit & X API trends. Powered by Gemini.</p>
+            <p class="text-gray-400 text-xs mt-2">&copy; 2025 VentureScope Research.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Data Source ---
+        const reportData = [
+            {
+                id: 1,
+                category: "B2B",
+                platform: "Reddit",
+                subsource: "r/startups",
+                title: "Idea Validation Without Coding",
+                summary: "Entrepreneurs struggle to validate SaaS ideas without investing time/money into an MVP first.",
+                quote: "I have 5 ideas but I can't code well enough to build MVPs for all of them just to see if people care. I wish there was a way to simulate a product launch.",
+                solution: "No-code 'Fake Door' generator: Instantly builds a landing page + ad mockup + analytics setup to test intent before building.",
+                severity: "High"
+            },
+            {
+                id: 2,
+                category: "Productivity",
+                platform: "X",
+                subsource: "@techuser_99",
+                title: "Bookmark Graveyard",
+                summary: "Users accumulate thousands of bookmarks/saves on X and Browser that they never revisit.",
+                quote: "My bookmarks folder is where interesting articles go to die. I have 500+ saved threads and zero clue what's in them.",
+                solution: "AI Bookmark Digest: A tool that scrapes your weekly bookmarks, summarizes them into a 5-minute newsletter, and archives the rest.",
+                severity: "Medium"
+            },
+            {
+                id: 3,
+                category: "Lifestyle",
+                platform: "Reddit",
+                subsource: "r/cooking",
+                title: "Multi-Diet Household Planning",
+                summary: "Cooking for a family where one is Vegan, one is Keto, and one is Gluten-Free is a logistical nightmare.",
+                quote: "I'm making three different dinners every night. I need a meal planner that finds 'base' recipes I can modify slightly for 3 different diets.",
+                solution: "The 'Base Meal' App: Suggests recipes with a common core (e.g., taco filling) and modular sides/toppings to satisfy conflicting dietary filters.",
+                severity: "High"
+            },
+            {
+                id: 4,
+                category: "Finance",
+                platform: "Reddit",
+                subsource: "r/personalfinance",
+                title: "The 'Subscription Creep' Audit",
+                summary: "Small subscriptions ($2.99 here, $4.99 there) are going unnoticed on bank statements.",
+                quote: "Just realized I've been paying for a PDF editor for 3 years. My bank app lumps it under 'Services'.",
+                solution: "Subscription Hunter: Scans email receipts (not just bank feeds) to find trial confirmations and recurring billing alerts, with a 'One-Click Cancel' bot.",
+                severity: "Medium"
+            },
+            {
+                id: 5,
+                category: "Lifestyle",
+                platform: "Reddit",
+                subsource: "r/parenting",
+                title: "Digital Memory Overload",
+                summary: "Parents have 50,000 photos of their kids but never look at them or print them.",
+                quote: "I have 10 years of photos on Google Photos. It's too overwhelming to sort through to make a yearbook.",
+                solution: "Auto-Curator: AI that picks the 'Best 10' photos per month (filtering duplicates/blurry ones) and auto-designs a physical yearbook page.",
+                severity: "Low"
+            },
+            {
+                id: 6,
+                category: "Productivity",
+                platform: "X",
+                subsource: "Thread on Remote Work",
+                title: "Meeting Relevance Calculator",
+                summary: "Employees are burnt out sitting in meetings where they only need to be present for 5 minutes.",
+                quote: "Sat in a 2-hour standup just to say 'I'm working on the API'. Could have been an email.",
+                solution: "Meeting ROI Bot: Connects to Calendar/Zoom. Analyzes transcript to tell you exactly when your name/project was mentioned vs total time wasted.",
+                severity: "High"
+            },
+            {
+                id: 7,
+                category: "B2B",
+                platform: "Reddit",
+                subsource: "r/marketing",
+                title: "Influencer ROI Truth",
+                summary: "Small brands can't tell if an influencer's followers are real or bots before hiring them.",
+                quote: "Spent $500 on a promo and got 0 clicks. Pretty sure her 50k followers are bought.",
+                solution: "Audience Audit Plugin: Browser extension that instantly scores an influencer's engagement quality and detects bot patterns on their profile overlay.",
+                severity: "Medium"
+            },
+            {
+                id: 8,
+                category: "Finance",
+                platform: "Reddit",
+                subsource: "r/StudentLoans",
+                title: "Loan Repayment Strategizer",
+                summary: "Confusing government rules and changing interest rates make it hard to pick the best repayment plan.",
+                quote: "SAVE plan? IBR? PAYE? I have no idea which acronym saves me money in the long run.",
+                solution: "Loan Simulator Visualizer: Simple slider-based UI showing exactly how much you pay total vs monthly for every government repayment option.",
+                severity: "High"
+            },
+            {
+                id: 9,
+                category: "Lifestyle",
+                platform: "X",
+                subsource: "@travel_fan",
+                title: "Visa Requirement Anxiety",
+                summary: "Travel rules change constantly, and official government sites are hard to parse.",
+                quote: "Almost got denied boarding because I didn't know the UK changed their ETA rules yesterday.",
+                solution: "BorderAlert: Push notification app that tracks your specific passport + destination combo and alerts you immediately if entry rules change.",
+                severity: "High"
+            },
+            {
+                id: 10,
+                category: "Productivity",
+                platform: "Reddit",
+                subsource: "r/ADHD",
+                title: "Task Paralysis Breaker",
+                summary: "Users with ADHD get overwhelmed by large to-do lists and end up doing nothing.",
+                quote: "My to-do list says 'Clean House' and I just freeze. It's too big.",
+                solution: "Task Deconstructor: AI that takes a big task like 'Clean House' and breaks it into 5-minute micro-steps (e.g., 'Pick up 3 socks', 'Wipe counter').",
+                severity: "Medium"
+            }
+        ];
+
+        // --- State Management ---
+        let currentFilter = 'all';
+        let solutionMode = false;
+
+        // --- Encryption Logic ---
+        const ENCRYPTION_SECRET = "VentureScope_Gemini_Secret_Salt_v1";
+
+        function encryptData(text) {
+            try {
+                let result = "";
+                for (let i = 0; i < text.length; i++) {
+                    result += String.fromCharCode(text.charCodeAt(i) ^ ENCRYPTION_SECRET.charCodeAt(i % ENCRYPTION_SECRET.length));
+                }
+                return btoa(result);
+            } catch (e) {
+                console.error("Encryption error:", e);
+                return "";
+            }
+        }
+
+        function decryptData(ciphertext) {
+            try {
+                const text = atob(ciphertext);
+                let result = "";
+                for (let i = 0; i < text.length; i++) {
+                    result += String.fromCharCode(text.charCodeAt(i) ^ ENCRYPTION_SECRET.charCodeAt(i % ENCRYPTION_SECRET.length));
+                }
+                return result;
+            } catch (e) {
+                console.error("Decryption error (key might be invalid or old format):", e);
+                return "";
+            }
+        }
+
+        let encryptedKey = localStorage.getItem('gemini_api_key');
+        // Backward compatibility: check if it looks like base64/encrypted, if not assume plaintext and migrate or just use. 
+        // Since we are changing formats, better to just try decrypt, if fails or returns garbage, asking user again might be safer 
+        // but for now let's assume if it fails to decrypt properly we might need to reset.
+        // However, a simple try/catch in decrypt handles basic base64 errors.
+        let apiKey = encryptedKey ? decryptData(encryptedKey) : "";
+
+        // --- DOM Elements ---
+        const cardsGrid = document.getElementById('cardsGrid');
+        const solutionToggle = document.getElementById('solutionToggle');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCards();
+            initCharts();
+            setupEventListeners();
+            checkApiKey();
+        });
+
+        // --- Core Logic ---
+        function setupEventListeners() {
+            // Solution Toggle
+            solutionToggle.addEventListener('change', (e) => {
+                solutionMode = e.target.checked;
+                updateCardView();
+            });
+        }
+
+        // --- API Key Management ---
+        function checkApiKey() {
+            if (!apiKey) {
+                document.getElementById('apiKeyModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function saveApiKey() {
+            const input = document.getElementById('apiKeyInput');
+            const key = input.value.trim();
+            if (key) {
+                apiKey = key;
+                const encrypted = encryptData(key);
+                localStorage.setItem('gemini_api_key', encrypted);
+                document.getElementById('apiKeyModal').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            } else {
+                input.classList.add('border-red-500');
+                input.classList.add('ring-2');
+                input.classList.add('ring-red-500');
+                setTimeout(() => {
+                    input.classList.remove('border-red-500');
+                    input.classList.remove('ring-2');
+                    input.classList.remove('ring-red-500');
+                }, 2000);
+            }
+        }
+
+        // --- Gemini API Handler ---
+        async function callGeminiAPI(prompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }]
+            };
+
+            // Backoff strategy
+            const delays = [1000, 2000, 4000, 8000, 16000];
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 429) throw new Error('Too Many Requests');
+                        if (response.status === 400 || response.status === 403) {
+                            localStorage.removeItem('gemini_api_key');
+                            apiKey = "";
+                            checkApiKey(); // Prompt user again
+                            throw new Error('Invalid API Key. Storage cleared. Please re-enter.');
+                        }
+                        throw new Error(`API Error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No analysis generated.";
+                } catch (e) {
+                    if (i === 4) return `Error: Could not connect to Gemini. ${e.message}`;
+                    await new Promise(resolve => setTimeout(resolve, delays[i]));
+                }
+            }
+        }
+
+        function openModal() {
+            document.getElementById('aiModal').classList.remove('hidden');
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('aiResponseContent').classList.add('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('aiModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // --- ADVANCED MARKDOWN FORMATTER ---
+        function formatMarkdown(text) {
+            if (!text) return '';
+
+            // 1. Uniform newlines
+            let html = text.replace(/\r\n/g, '\n');
+
+            // 2. Headers
+            html = html.replace(/^### (.*$)/gm, '<h3 class="text-lg font-bold text-indigo-700 mt-6 mb-3 flex items-center gap-2"><i class="ph-bold ph-caret-right text-indigo-400 text-base"></i>$1</h3>');
+            html = html.replace(/^## (.*$)/gm, '<h2 class="text-xl font-bold text-gray-900 mt-8 mb-4 border-b border-gray-100 pb-2">$1</h2>');
+            html = html.replace(/^# (.*$)/gm, '<h1 class="text-2xl font-extrabold text-gray-900 mt-6 mb-4">$1</h1>');
+
+            // 3. Bold/Italic/Code
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em class="italic text-gray-600">$1</em>');
+            html = html.replace(/`([^`]+)`/g, '<code class="bg-gray-100 text-indigo-600 px-1.5 py-0.5 rounded text-sm font-mono border border-gray-200">$1</code>');
+
+            // 4. Handle Lists (Bullet and Numbered) - Simple Block Processor
+            const lines = html.split('\n');
+            let output = [];
+            let inList = false;
+            let listType = null; // 'ul' or 'ol'
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+
+                // Check for Bullet List
+                if (/^[-*]\s/.test(trimmed)) {
+                    if (!inList || listType !== 'ul') {
+                        if (inList) output.push(listType === 'ul' ? '</ul>' : '</ol>');
+                        output.push('<ul class="space-y-3 mb-6 ml-1">');
+                        inList = true;
+                        listType = 'ul';
+                    }
+                    output.push(`<li class="flex items-start text-gray-700 group"><span class="mr-3 mt-1.5 w-1.5 h-1.5 bg-indigo-500 rounded-full flex-shrink-0 group-hover:bg-indigo-600 transition-colors"></span><span>${trimmed.replace(/^[-*]\s/, '')}</span></li>`);
+                }
+                // Check for Numbered List
+                else if (/^\d+\.\s/.test(trimmed)) {
+                    if (!inList || listType !== 'ol') {
+                        if (inList) output.push(listType === 'ul' ? '</ul>' : '</ol>');
+                        output.push('<ol class="space-y-3 mb-6 list-none counter-reset-item">');
+                        inList = true;
+                        listType = 'ol';
+                    }
+                    const numberMatch = trimmed.match(/^(\d+)\.\s/);
+                    const number = numberMatch ? numberMatch[1] : '•';
+                    const content = trimmed.replace(/^\d+\.\s/, '');
+                    output.push(`<li class="flex items-start text-gray-700 group"><span class="mr-3 flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition-colors shadow-sm">${number}</span><span class="mt-0.5">${content}</span></li>`);
+                }
+                // Empty lines or Headers or other text
+                else {
+                    if (inList) {
+                        output.push(listType === 'ul' ? '</ul>' : '</ol>');
+                        inList = false;
+                        listType = null;
+                    }
+
+                    if (trimmed.startsWith('<h')) {
+                        output.push(trimmed);
+                    } else if (trimmed.length > 0) {
+                        output.push(`<p class="text-gray-600 leading-relaxed mb-4 max-w-prose">${trimmed}</p>`);
+                    }
+                }
+            });
+
+            if (inList) {
+                output.push(listType === 'ul' ? '</ul>' : '</ol>');
+            }
+
+            return output.join('');
+        }
+
+        // --- AI Feature 1: Business Blueprint ---
+        async function generateBlueprint(id) {
+            openModal();
+            const item = reportData.find(i => i.id === id);
+            document.getElementById('modal-heading').innerText = `Blueprint: ${item.title}`;
+
+            const prompt = `
+                Act as a Y-Combinator Partner and Product Strategy Expert. You are advising a founder on this verified market opportunity:
+                
+                context: {
+                    problem: "${item.title}",
+                    insight: "${item.summary}",
+                    customer_voice: "${item.quote}",
+                    sector: "${item.category}"
+                }
+                
+                Generate a 'VentureScope Strategic Blueprint' in Markdown. avoid generic advice. Be specific, contrarian, and actionable.
+
+                Structure:
+                ### 1. The "Why Now" (Market Timing)
+                Why is this urgent *today*? (e.g., tech shift, cultural change, regulatory shift).
+
+                ### 2. The Solution Hooks
+                *   **The Wedge**: A tiny, specific entry point feature to get the first 100 users.
+                *   **The Moat**: How this becomes defensible over time (Network effects? Data?).
+
+                ### 3. Business Mechanics
+                *   **Micro-Niche**: The exact person to cold email first.
+                *   **Business Model**: Optimial pricing strategy for this sector.
+
+                ### 4. Riskiest Assumption
+                The one thing that must be true for this to work, and how to test it in 24 hours.
+            `;
+
+            const response = await callGeminiAPI(prompt);
+            const htmlContent = formatMarkdown(response);
+
+            document.getElementById('loadingState').classList.add('hidden');
+            const contentDiv = document.getElementById('aiResponseContent');
+            contentDiv.innerHTML = htmlContent;
+            contentDiv.classList.remove('hidden');
+        }
+
+        // --- AI Feature 2: Market Trend Analysis ---
+        async function analyzeMarketSignals() {
+            openModal();
+            document.getElementById('modal-heading').innerText = `Market Gap Analysis`;
+
+            const filteredData = currentFilter === 'all'
+                ? reportData
+                : reportData.filter(item => item.category === currentFilter);
+
+            const summaries = filteredData.map(i => `- ${i.title}: ${i.summary}`).join('\n');
+            const categoryName = currentFilter === 'all' ? 'All Sectors' : currentFilter;
+
+            const prompt = `
+                Act as a Data Scientist and Market Analyst. You are analyzing ${filteredData.length} raw signal clusters from the '${categoryName}' sector.
+                
+                Raw Data:
+                ${summaries}
+
+                Identify the hidden 'Meta-Trends' connecting these discrete problems. 
+                
+                Output structure in Markdown:
+                ### 1. The Dominant Friction
+                What is the core emotional or logistical friction driving these users crazy? (e.g., "Fragmentation Fatigue", "Cognitive Overload").
+
+                ### 2. The Opportunity Gap
+                Where are the incumbents failing? (e.g., "Tools are too complex", "Tools are too expensive").
+
+                ### 3. Prediction for 2026
+                Based on these signals, what does the next generation of software in this space look like? Be bold.
+            `;
+
+            const response = await callGeminiAPI(prompt);
+            const htmlContent = formatMarkdown(response);
+
+            document.getElementById('loadingState').classList.add('hidden');
+            const contentDiv = document.getElementById('aiResponseContent');
+            contentDiv.innerHTML = htmlContent;
+            contentDiv.classList.remove('hidden');
+        }
+
+        function copyToClipboard() {
+            const content = document.getElementById('aiResponseContent').innerText;
+            navigator.clipboard.writeText(content);
+            const btn = document.querySelector('button[onclick="copyToClipboard()"]');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i class="ph-bold ph-check mr-2"></i> Copied!`;
+            setTimeout(() => btn.innerHTML = originalHTML, 2000);
+        }
+
+        function filterCards(category) {
+            currentFilter = category;
+
+            // Update buttons
+            filterButtons.forEach(btn => {
+                const icon = btn.querySelector('i');
+                if (btn.dataset.filter === category) {
+                    btn.classList.remove('bg-gray-100', 'text-gray-600');
+                    btn.classList.add('bg-gray-900', 'text-white');
+                } else {
+                    btn.classList.add('bg-gray-100', 'text-gray-600');
+                    btn.classList.remove('bg-gray-900', 'text-white');
+                }
+            });
+
+            renderCards();
+        }
+
+        function getPlatformIcon(platform) {
+            if (platform === 'Reddit') return `<span class="bg-[#FF4500] text-white text-xs px-2 py-1 rounded-full font-bold flex items-center gap-1"><i class="ph-bold ph-reddit-logo"></i> Reddit</span>`;
+            if (platform === 'X') return `<span class="bg-black text-white text-xs px-2 py-1 rounded-full font-bold flex items-center gap-1"><i class="ph-bold ph-x-logo"></i> X</span>`;
+            return `<span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full font-bold">${platform}</span>`;
+        }
+
+        function getCategoryIcon(category) {
+            switch (category) {
+                case 'B2B': return 'ph-briefcase';
+                case 'Productivity': return 'ph-lightning';
+                case 'Finance': return 'ph-currency-dollar';
+                case 'Lifestyle': return 'ph-coffee';
+                default: return 'ph-tag';
+            }
+        }
+
+        function getSeverityBadge(level) {
+            const configs = {
+                'High': { color: 'text-red-600 bg-red-50 border-red-100', icon: 'ph-warning' },
+                'Medium': { color: 'text-yellow-600 bg-yellow-50 border-yellow-100', icon: 'ph-info' },
+                'Low': { color: 'text-green-600 bg-green-50 border-green-100', icon: 'ph-check-circle' }
+            };
+            const config = configs[level];
+            return `<span class="border ${config.color} text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-lg flex items-center gap-1"><i class="ph-bold ${config.icon}"></i> ${level} Impact</span>`;
+        }
+
+        function renderCards() {
+            cardsGrid.innerHTML = '';
+
+            const filteredData = currentFilter === 'all'
+                ? reportData
+                : reportData.filter(item => item.category === currentFilter);
+
+            if (filteredData.length === 0) {
+                cardsGrid.innerHTML = `<div class="col-span-3 text-center py-20 text-gray-400 flex flex-col items-center"><i class="ph-duotone ph-magnifying-glass text-4xl mb-2"></i><span>No pain points found for this category.</span></div>`;
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card-shadow bg-white rounded-xl border border-gray-100 overflow-hidden flex flex-col h-full fade-in group';
+
+                // Card Content
+                card.innerHTML = `
+                    <div class="p-6 flex flex-col h-full relative">
+                        <!-- Decorative Top Border -->
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent group-hover:via-indigo-400 transition-all duration-500"></div>
+
+                        <!-- Header -->
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-2">
+                                ${getPlatformIcon(item.platform)}
+                                <span class="text-xs text-gray-400 font-medium">${item.subsource}</span>
+                            </div>
+                            ${getSeverityBadge(item.severity)}
+                        </div>
+
+                        <!-- Title & Problem -->
+                        <div class="flex items-start gap-3 mb-2">
+                            <div class="mt-1 min-w-[24px] w-6 h-6 rounded bg-gray-50 flex items-center justify-center text-gray-400">
+                                <i class="ph-duotone ${getCategoryIcon(item.category)} text-lg"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 leading-tight group-hover:text-indigo-600 transition-colors">${item.title}</h3>
+                        </div>
+                        
+                        <p class="text-sm text-gray-600 mb-4 flex-grow pl-9">${item.summary}</p>
+
+                        <!-- Quote Section -->
+                        <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-gray-300 mb-4 relative ml-9">
+                            <i class="ph-fill ph-quotes text-gray-200 text-2xl absolute top-2 left-2 -z-10"></i>
+                            <p class="text-xs text-gray-500 italic relative z-10">"${item.quote}"</p>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="mt-auto border-t border-gray-100 pt-4 flex items-center justify-between">
+                            <button onclick="generateBlueprint(${item.id})" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 transition-colors px-2 py-1 rounded hover:bg-indigo-50">
+                                <i class="ph-fill ph-sparkle"></i> AI Blueprint
+                            </button>
+                            
+                            <!-- Solution Logic (Simplified for layout, full toggle exists globally) -->
+                            <div class="solution-content ${solutionMode ? 'opacity-100 visible' : 'opacity-0 invisible absolute'} transition-all duration-300 text-right">
+                                <p class="text-[10px] uppercase font-bold text-gray-400 mb-0">Solution Hint</p>
+                                <p class="text-xs text-gray-800 font-medium truncate max-w-[150px]">${item.solution.substring(0, 30)}...</p>
+                            </div>
+                            <div class="${solutionMode ? 'hidden' : 'block'} text-xs text-gray-300 italic">
+                                Toggle to reveal
+                            </div>
+                        </div>
+                        
+                        <!-- Full Solution Overlay (Only visible when toggled) -->
+                         <div class="solution-overlay absolute bottom-0 left-0 w-full bg-white/95 backdrop-blur-sm p-4 border-t border-indigo-100 transform translate-y-full transition-transform duration-300 ${solutionMode ? '!translate-y-0' : ''}">
+                             <div class="flex items-start gap-2">
+                                <i class="ph-fill ph-lightbulb text-indigo-500 mt-1"></i>
+                                <div>
+                                    <p class="text-[10px] uppercase font-bold text-indigo-600 mb-1">Potential Solution</p>
+                                    <p class="text-sm text-gray-800 font-medium leading-snug">${item.solution}</p>
+                                </div>
+                             </div>
+                        </div>
+
+                    </div>
+                `;
+                cardsGrid.appendChild(card);
+            });
+        }
+
+        function updateCardView() {
+            // Re-render to handle structure changes safely
+            renderCards();
+        }
+
+        // --- Charts Implementation ---
+        function initCharts() {
+            // Data Prep
+            const categories = {};
+            const platforms = { 'Reddit': 0, 'X': 0 };
+
+            reportData.forEach(item => {
+                categories[item.category] = (categories[item.category] || 0) + 1;
+                platforms[item.platform] = (platforms[item.platform] || 0) + 1;
+            });
+
+            // Chart 1: Categories
+            const ctxCat = document.getElementById('categoryChart').getContext('2d');
+            new Chart(ctxCat, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(categories),
+                    datasets: [{
+                        label: '# of Issues',
+                        data: Object.values(categories),
+                        backgroundColor: '#4F46E5', // Indigo-600
+                        borderRadius: 4,
+                        barThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#1F2937', padding: 12 }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // Chart 2: Platforms
+            const ctxPlat = document.getElementById('platformChart').getContext('2d');
+            new Chart(ctxPlat, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(platforms),
+                    datasets: [{
+                        data: Object.values(platforms),
+                        backgroundColor: ['#F97316', '#000000'], // Reddit Orange, X Black
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
+                        tooltip: { backgroundColor: '#1F2937', padding: 12 }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
