@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataJpaTest & Serverless Architectures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            deep: '#0f172a',
+                            slate: '#1e293b',
+                            accent: '#22d3ee', // Electric Cyan
+                            muted: '#94a3b8',
+                            surface: '#f8fafc'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Montserrat', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.7;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .keyword { color: #c084fc; }
+        .annotation { color: #22d3ee; }
+        .string { color: #4ade80; }
+        .comment { color: #64748b; font-style: italic; }
+
+        /* Custom scrollbar for better aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        .hero-shape {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.05) 0%, rgba(37, 99, 235, 0.05) 100%);
+            clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="font-body antialiased">
+
+    <!-- Header / Hero Section -->
+    <header class="relative pt-16 pb-12 px-6 overflow-hidden">
+        <div class="hero-shape"></div>
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-brand-accent uppercase bg-cyan-100 rounded-full">
+                Technical Architecture Series
+            </div>
+            <h1 class="font-display text-4xl md:text-6xl font-800 tracking-tight text-brand-deep mb-6 leading-tight">
+                Explain the use of <span class="gradient-text">DataJpaTest</span> in Spring Boot & Real-Time Usecases
+            </h1>
+            <p class="text-lg md:text-xl text-brand-muted max-w-2xl mx-auto font-light">
+                A professional guide to high-fidelity persistence testing and event-driven cloud scaling.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-screen-xl mx-auto px-6 pb-24">
+        
+        <!-- Educational Text Section -->
+        <section class="max-w-3xl mx-auto mb-20">
+            <div class="prose prose-slate prose-lg max-w-none">
+                
+                <div class="mb-12 p-8 glass-card rounded-3xl shadow-sm border-l-4 border-brand-accent">
+                    <h2 class="font-display text-2xl font-bold text-brand-deep mb-4 mt-0">Technical Overview</h2>
+                    <p class="text-brand-slate leading-relaxed">
+                        This report provides a technical overview of two critical components in modern, scalable IT environments: <strong>@DataJpaTest</strong> for high-fidelity persistence layer validation and <strong>Serverless/Lambda</strong> functions for event-driven, industrial-scale processing.
+                    </p>
+                </div>
+
+                <div class="space-y-12">
+                    <!-- Part 1 -->
+                    <div class="relative">
+                        <h2 class="font-display text-3xl font-bold text-brand-deep flex items-center gap-3 mb-6">
+                            <span class="flex items-center justify-center w-10 h-10 bg-brand-deep text-white rounded-lg text-lg">1</span>
+                            The Role and Usage of @DataJpaTest
+                        </h2>
+                        <p class="mb-6">
+                            <code>@DataJpaTest</code> is a specialized test annotation provided by the Spring Boot Test module specifically for <strong>Slices Testing</strong>. It focuses exclusively on the persistence layer of a Spring Boot application.
+                        </p>
+
+                        <h3 class="font-display text-xl font-semibold text-brand-slate mb-4">Technical Characteristics</h3>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 list-none p-0 mb-8">
+                            <li class="p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                                <strong class="text-brand-accent block mb-1">Context Scope</strong>
+                                Restricts context to JPA components: Entities, Repositories, and DataSource.
+                            </li>
+                            <li class="p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                                <strong class="text-brand-accent block mb-1">Auto-Configuration</strong>
+                                Configures in-memory DB (H2, HSQL) automatically if available on classpath.
+                            </li>
+                            <li class="p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                                <strong class="text-brand-accent block mb-1">Transactionality</strong>
+                                Tests are transactional by default and roll back after each execution.
+                            </li>
+                            <li class="p-4 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                                <strong class="text-brand-accent block mb-1">TestEntityManager</strong>
+                                Provides a specialized bean for manual persistence testing outside repositories.
+                            </li>
+                        </ul>
+
+                        <div class="mb-10">
+                            <h3 class="font-display text-xl font-semibold text-brand-slate mb-4">Basic Implementation Example</h3>
+                            <div class="code-block">
+<span class="annotation">@DataJpaTest</span>
+<span class="keyword">class</span> UserRepositoryTest {
+
+    <span class="annotation">@Autowired</span>
+    <span class="keyword">private</span> UserRepository userRepository;
+
+    <span class="annotation">@Test</span>
+    <span class="keyword">void</span> shouldSaveAndFindUser() {
+        User user = <span class="keyword">new</span> User(<span class="string">"JohnDoe"</span>, <span class="string">"john@example.com"</span>);
+        userRepository.save(user);
+        
+        Optional&lt;User&gt; found = userRepository.findByEmail(<span class="string">"john@example.com"</span>);
+        assertThat(found).isPresent();
+    }
+}</div>
+                        </div>
+
+                        <h3 class="font-display text-xl font-semibold text-brand-slate mb-4">Industrial Use Cases</h3>
+                        <div class="space-y-4 mb-8">
+                            <div class="flex gap-4">
+                                <div class="mt-1.5 w-2 h-2 rounded-full bg-brand-accent shrink-0"></div>
+                                <div><strong>Validating Custom Queries:</strong> Verifies JPQL and Native SQL against real schemas early.</div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="mt-1.5 w-2 h-2 rounded-full bg-brand-accent shrink-0"></div>
+                                <div><strong>Database Constraints:</strong> Ensures Hibernate mappings match database unique/null constraints.</div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="mt-1.5 w-2 h-2 rounded-full bg-brand-accent shrink-0"></div>
+                                <div><strong>Auditing Logic:</strong> Confirms @CreatedDate and Envers metadata population.</div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="mt-1.5 w-2 h-2 rounded-full bg-brand-accent shrink-0"></div>
+                                <div><strong>Migration Validation:</strong> Syncs Java entity models with Liquibase/Flyway scripts.</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900 text-white p-6 rounded-2xl mb-12 flex items-start gap-4 shadow-xl">
+                            <div class="bg-brand-accent p-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Importance in CI/CD</h4>
+                                <p class="text-slate-300 text-sm">Provides a fast feedback loop. By avoiding full context loads, hundreds of tests run in seconds, eliminating "flaky tests" via automated rollbacks.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Part 2 -->
+                    <div class="relative pt-8 border-t border-slate-200">
+                        <h2 class="font-display text-3xl font-bold text-brand-deep flex items-center gap-3 mb-6">
+                            <span class="flex items-center justify-center w-10 h-10 bg-brand-deep text-white rounded-lg text-lg">2</span>
+                            Industrial Use of Serverless and Lambda
+                        </h2>
+                        <p class="mb-6">
+                            Modern IT environments rely on Serverless computing—specifically Function-as-a-Service (FaaS) like <strong>AWS Lambda</strong>—to achieve the agility and scalability required for digital transformation.
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                                <div class="text-brand-accent font-bold text-2xl mb-2">Auto</div>
+                                <h4 class="font-bold text-brand-deep mb-2">Scalability</h4>
+                                <p class="text-sm text-slate-600">Scales horizontally from one to thousands of requests instantly.</p>
+                            </div>
+                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                                <div class="text-brand-accent font-bold text-2xl mb-2">Pay</div>
+                                <h4 class="font-bold text-brand-deep mb-2">Cost-Efficiency</h4>
+                                <p class="text-sm text-slate-600">Billed only for execution time, eliminating "idle costs."</p>
+                            </div>
+                            <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+                                <div class="text-brand-accent font-bold text-2xl mb-2">Zero</div>
+                                <h4 class="font-bold text-brand-deep mb-2">Ops</h4>
+                                <p class="text-sm text-slate-600">OS updates and patching are handled by the cloud provider.</p>
+                            </div>
+                        </div>
+
+                        <h3 class="font-display text-xl font-semibold text-brand-slate mb-4">Core Industrial Use Cases</h3>
+                        <div class="space-y-4">
+                            <div class="group p-4 hover:bg-white hover:shadow-lg transition-all rounded-xl border border-transparent hover:border-slate-100">
+                                <h5 class="font-bold text-brand-deep mb-1">Event-Driven Architectures</h5>
+                                <p class="text-brand-slate text-sm">Acts as "glue" between cloud services (e.g., S3 upload triggering image resizing).</p>
+                            </div>
+                            <div class="group p-4 hover:bg-white hover:shadow-lg transition-all rounded-xl border border-transparent hover:border-slate-100">
+                                <h5 class="font-bold text-brand-deep mb-1">Real-Time Data Processing</h5>
+                                <p class="text-brand-slate text-sm">In IIoT, Lambda processes telemetry data from Kinesis or Kafka to trigger alerts.</p>
+                            </div>
+                            <div class="group p-4 hover:bg-white hover:shadow-lg transition-all rounded-xl border border-transparent hover:border-slate-100">
+                                <h5 class="font-bold text-brand-deep mb-1">API Backends</h5>
+                                <p class="text-brand-slate text-sm">Combined with API Gateway for cost-effective REST or GraphQL endpoints.</p>
+                            </div>
+                            <div class="group p-4 hover:bg-white hover:shadow-lg transition-all rounded-xl border border-transparent hover:border-slate-100">
+                                <h5 class="font-bold text-brand-deep mb-1">Automated DevOps</h5>
+                                <p class="text-brand-slate text-sm">Internal tasks like automated backups, security auditing, and log analysis.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conclusion -->
+                    <div class="mt-16 p-8 bg-brand-deep rounded-3xl text-white shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-10 opacity-10">
+                            <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                        </div>
+                        <h2 class="font-display text-2xl font-bold mb-4 relative z-10">Conclusion</h2>
+                        <p class="text-slate-300 leading-relaxed relative z-10">
+                            While <strong>@DataJpaTest</strong> ensures the reliability and integrity of the data persistence layer during development, <strong>Serverless and Lambda</strong> provide the elastic, event-driven infrastructure for deploying those services at scale. Together, they represent the modern "Cloud-Native" approach to building resilient, cost-effective, and high-performance digital systems.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Infographic Image Section -->
+        <section class="max-w-5xl mx-auto px-4">
+            <div class="text-center mb-10">
+                <h3 class="font-display text-2xl font-bold text-brand-deep mb-2">Visualizing the Ecosystem</h3>
+                <div class="w-20 h-1 bg-brand-accent mx-auto rounded-full"></div>
+            </div>
+            
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                <div class="relative bg-white p-4 md:p-8 rounded-2xl shadow-2xl flex justify-center items-center">
+                    <img src='https://opal.google/board/blobs/0870ff3b-0f82-4da7-a1b6-b7b3919723b2' alt='DataJpaTest and Serverless Workflow Infographic' class="max-w-full h-auto block mx-auto rounded-lg transition-transform duration-500 group-hover:scale-[1.01]" />
+                </div>
+            </div>
+            
+            <div class="mt-8 text-center text-sm text-brand-muted italic">
+                Figure 1: Comparison and integration of Persistence Layer Testing vs. Serverless Deployment Architecture.
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Interactive Micro-interactions Script -->
+    <script>
+        document.querySelectorAll('li, .group').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                el.style.transform = 'translateY(-2px)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter DI & Serverless Architectures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            deep: '#1e293b',
+                            accent: '#22d3ee', // Cyan
+                            highlight: '#818cf8', // Indigo/Violet
+                            surface: 'rgba(30, 41, 59, 0.7)',
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Outfit', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(30, 41, 59, 0.65);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .accent-gradient {
+            background: linear-gradient(90deg, #22d3ee, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
+
+    <!-- Background Decorative Elements -->
+    <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-brand-accent/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-brand-highlight/10 rounded-full blur-[120px] animate-pulse-slow"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative pt-20 pb-16 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <span class="inline-block py-1 px-3 mb-4 text-xs font-semibold tracking-widest text-brand-accent uppercase border border-brand-accent/30 rounded-full bg-brand-accent/5">
+                Technical Deep Dive
+            </span>
+            <h1 class="font-display text-5xl md:text-7xl font-bold tracking-tight mb-6">
+                <span class="text-gradient">Flutter DI &</span> <br/>
+                <span class="accent-gradient">Serverless Backends</span>
+            </h1>
+            <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
+                Bridging modern client-side architectures with event-driven infrastructure for scalable applications.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 pb-24 space-y-20">
+        
+        <!-- Part 1: Dependency Injection -->
+        <section id="di-flutter" class="space-y-8">
+            <div class="flex items-center gap-4 mb-2">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-brand-accent/30 to-transparent"></div>
+                <h2 class="font-display text-2xl font-semibold text-brand-accent uppercase tracking-widest">Part 01: Flutter DI</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-brand-accent/30 to-transparent"></div>
+            </div>
+
+            <article class="glass-card p-8 md:p-12 rounded-3xl space-y-8">
+                <div>
+                    <h3 class="font-display text-3xl font-bold text-white mb-4">What is Dependency Injection?</h3>
+                    <p class="text-slate-300 leading-relaxed">
+                        Dependency Injection (DI) is a software design pattern that implements <strong>Inversion of Control (IoC)</strong>. Instead of a class creating its own dependencies, these dependencies are provided ("injected") from the outside.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-5 bg-white/5 rounded-2xl border border-white/5 hover:border-brand-accent/30 transition-colors group">
+                        <div class="w-10 h-10 rounded-lg bg-brand-accent/10 flex items-center justify-center mb-4 text-brand-accent group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">Decoupling & Testability</h4>
+                        <p class="text-sm text-slate-400">Separates UI from logic and allows easy swapping of real services with mock implementations during testing.</p>
+                    </div>
+                    <div class="p-5 bg-white/5 rounded-2xl border border-white/5 hover:border-brand-highlight/30 transition-colors group">
+                        <div class="w-10 h-10 rounded-lg bg-brand-highlight/10 flex items-center justify-center mb-4 text-brand-highlight group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-white mb-2">Scalability & Lifecycle</h4>
+                        <p class="text-sm text-slate-400">Centralizes configuration and manages resource initialization and disposal to prevent memory leaks.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h3 class="font-display text-2xl font-bold text-white border-l-4 border-brand-highlight pl-4">Popular Frameworks</h3>
+                    
+                    <!-- Framework Grid -->
+                    <div class="space-y-4">
+                        <!-- Provider -->
+                        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-700/50">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="text-xl font-bold text-brand-accent">Provider</h4>
+                                <span class="text-[10px] px-2 py-0.5 rounded border border-brand-accent/20 text-brand-accent uppercase font-bold tracking-tighter">Tree Bound</span>
+                            </div>
+                            <p class="text-sm text-slate-300 mb-4">Built on InheritedWidget. Dependencies flow down the widget tree via context. Consumed using <code>context.read()</code> or <code>watch()</code>.</p>
+                            <div class="grid grid-cols-2 gap-4 text-xs">
+                                <div><span class="text-green-400 font-bold block mb-1">Pros</span> Easy to learn, Flutter-native lifecycle integration.</div>
+                                <div><span class="text-red-400 font-bold block mb-1">Cons</span> Hard to use in non-UI classes; requires BuildContext.</div>
+                            </div>
+                        </div>
+
+                        <!-- Riverpod -->
+                        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-700/50">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="text-xl font-bold text-brand-highlight">Riverpod</h4>
+                                <span class="text-[10px] px-2 py-0.5 rounded border border-brand-highlight/20 text-brand-highlight uppercase font-bold tracking-tighter">Compile-Safe</span>
+                            </div>
+                            <p class="text-sm text-slate-300 mb-4">Re-imagining Provider. Removes reliance on BuildContext using global Providers and WidgetRef interaction.</p>
+                            <div class="grid grid-cols-2 gap-4 text-xs">
+                                <div><span class="text-green-400 font-bold block mb-1">Pros</span> Independent of widget tree, compile-time safety.</div>
+                                <div><span class="text-red-400 font-bold block mb-1">Cons</span> Slightly steeper learning curve than basic Provider.</div>
+                            </div>
+                        </div>
+
+                        <!-- GetIt -->
+                        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-700/50">
+                            <div class="flex justify-between items-start mb-3">
+                                <h4 class="text-xl font-bold text-white">GetIt (Service Locator)</h4>
+                                <span class="text-[10px] px-2 py-0.5 rounded border border-slate-500 text-slate-400 uppercase font-bold tracking-tighter">Global Access</span>
+                            </div>
+                            <p class="text-sm text-slate-300 mb-4">Direct registry of singletons and factories. Accessible globally via <code>GetIt.instance&lt;T&gt;()</code>.</p>
+                            <div class="grid grid-cols-2 gap-4 text-xs">
+                                <div><span class="text-green-400 font-bold block mb-1">Pros</span> No BuildContext needed; use it anywhere in Dart code.</div>
+                                <div><span class="text-red-400 font-bold block mb-1">Cons</span> Can hide dependencies; best paired with constructor injection.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Part 2: Serverless -->
+        <section id="serverless" class="space-y-8">
+            <div class="flex items-center gap-4 mb-2">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-brand-highlight/30 to-transparent"></div>
+                <h2 class="font-display text-2xl font-semibold text-brand-highlight uppercase tracking-widest">Part 02: Industrial Serverless</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-brand-highlight/30 to-transparent"></div>
+            </div>
+
+            <article class="glass-card p-8 md:p-12 rounded-3xl space-y-10">
+                <div class="relative">
+                    <div class="absolute -left-12 top-0 text-brand-highlight/20 select-none hidden md:block">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z"/></svg>
+                    </div>
+                    <h3 class="font-display text-3xl font-bold text-white mb-6">Technical Deep Dive</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-300">
+                        <div class="space-y-4">
+                            <p>Serverless computing abstracts infrastructure management. When a function executes, the provider pulls container images and launches lightweight execution environments like <strong>AWS Firecracker microVMs</strong>.</p>
+                            <p><strong>Cold Starts:</strong> The initialization lag for infrequently used functions, often mitigated via provisioned concurrency or fast runtimes like Go or Rust.</p>
+                        </div>
+                        <div class="space-y-4 border-l border-slate-700 pl-6">
+                            <p><strong>Statelessness:</strong> Every execution is independent. State must be persisted in external databases like DynamoDB or Redis.</p>
+                            <p><strong>Concurrency:</strong> Massive horizontal scaling. A spike of 1,000 requests can spin up 1,000 parallel environments in seconds.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-8">
+                    <h4 class="font-display text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded bg-brand-highlight/20 text-brand-highlight flex items-center justify-center text-sm italic">Scenario</span>
+                        High ROI Use-Cases
+                    </h4>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="flex gap-4 p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:translate-x-1 transition-transform">
+                            <div class="shrink-0 w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-brand-accent">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-slate-200">Event-Driven Data Processing</h5>
+                                <p class="text-sm text-slate-400">Triggering compression or database updates automatically on S3 image uploads.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:translate-x-1 transition-transform">
+                            <div class="shrink-0 w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-brand-accent">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-slate-200">Cron Jobs & Scheduled Tasks</h5>
+                                <p class="text-sm text-slate-400">Nightly database cleanups or batch notifications without maintaining 24/7 servers.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:translate-x-1 transition-transform">
+                            <div class="shrink-0 w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-brand-accent">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-slate-200">Variable/Spiky Traffic</h5>
+                                <p class="text-sm text-slate-400">Ticketing systems that scale to handle bursts and scale down to zero when idle.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Part 3: Intersection -->
+        <section id="intersection" class="space-y-8">
+            <div class="flex items-center gap-4 mb-2">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                <h2 class="font-display text-2xl font-semibold text-white uppercase tracking-widest">Part 03: The Intersection</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+            </div>
+
+            <article class="space-y-12">
+                <div class="prose prose-invert max-w-none text-slate-300">
+                    <p class="text-xl font-light italic border-l-4 border-brand-accent pl-6 py-2">
+                        "The intersection of Flutter DI and Serverless is where engineering elegance meets operational efficiency."
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
+                        <div class="p-6 bg-slate-800/20 rounded-2xl border border-slate-800">
+                            <h5 class="text-brand-accent font-bold mb-2">Environment Config</h5>
+                            <p class="text-sm">Easily switch between Dev, QA, and Prod API Gateway URLs using flavors and DI injection.</p>
+                        </div>
+                        <div class="p-6 bg-slate-800/20 rounded-2xl border border-slate-800">
+                            <h5 class="text-brand-accent font-bold mb-2">Abstracted Logic</h5>
+                            <p class="text-sm">Configured ApiClients with Auth interceptors are registered once and injected into repositories.</p>
+                        </div>
+                        <div class="p-6 bg-slate-800/20 rounded-2xl border border-slate-800">
+                            <h5 class="text-brand-accent font-bold mb-2">Mocking Cloud</h5>
+                            <p class="text-sm">Simulate costly serverless responses locally for rapid UI testing and verification.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Infographic -->
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-brand-highlight rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative bg-brand-dark rounded-2xl overflow-hidden shadow-2xl">
+                        <div class="p-4 bg-slate-800/50 flex items-center justify-between border-b border-slate-700">
+                            <div class="flex gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+                            </div>
+                            <span class="text-[10px] uppercase tracking-widest font-bold text-slate-500">System Architecture Visual</span>
+                        </div>
+                        <div class="p-4 md:p-8 flex justify-center items-center">
+                            <img src='https://opal.google/board/blobs/9a8aea38-7cc4-4370-b979-addf8cd699e8' alt='Dependency Injection and Serverless Architecture Diagram' class="w-full h-auto rounded-lg max-w-4xl mx-auto" />
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <div class="fixed bottom-8 right-8 z-50">
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-12 h-12 glass-card rounded-full flex items-center justify-center text-brand-accent hover:text-white transition-all transform hover:scale-110 active:scale-90">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+        </button>
+    </div>
+
+</body>
+</html>

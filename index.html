@@ -1,356 +1,635 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VentureScope | Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="assets/ai_library_icon.svg">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #050505;
-            color: #E5E5E5;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VentureScope</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="assets/ai_library_icon.svg">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-        h1,
-        h2,
-        h3,
-        .font-display {
-            font-family: 'Space Grotesk', sans-serif;
-        }
+    :root {
+      --bg: #FFFFFF;
+      --surface: #FFFFFF;
+      --border: #E4E4E0;
+      --border-hi: #AEAEAA;
+      --text: #1A1A1A;
+      --muted: #6B6B6B;
+      --faint: #9A9A9A;
+      --faintest: #DCDCD8;
+      --accent: #3D3D3D;
+      --accent2: #6B6B6B;
+      --r: 10px;
+      --r-sm: 6px;
+    }
 
-        /* Ambient Background */
-        .ambient-light {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(6, 95, 70, 0.08), transparent 25%);
-            z-index: -1;
-            pointer-events: none;
-        }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
 
-        /* Glass Cards */
-        .dashboard-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            transition: all 0.2s ease-out;
-        }
+    .page {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 60px 20px 96px;
+    }
 
-        .dashboard-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 52px;
+    }
 
-        /* Subtle grid pattern */
-        .bg-grid {
-            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            position: fixed;
-            inset: 0;
-            z-index: -2;
-            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-        }
-    </style>
+    .logo-box {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-box img {
+      width: 13px;
+      height: 13px;
+      filter: invert(1) brightness(10);
+    }
+
+    .wm-name {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .01em;
+    }
+
+    .wm-ver {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--faint);
+      margin-left: 4px;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -.02em;
+      margin-bottom: 6px;
+    }
+
+    .sub {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 32px;
+      border: 0.5px solid var(--border);
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      background: #FAFAF8;
+    }
+
+    .meta-cell {
+      flex: 1;
+      padding: 12px 16px;
+      border-right: 0.5px solid var(--border);
+    }
+
+    .meta-cell:last-child {
+      border-right: none;
+    }
+
+    .meta-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 1px;
+    }
+
+    .meta-lbl {
+      font-size: 11px;
+      color: var(--faint);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .s-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .s-ok {
+      background: #4A9E6B;
+    }
+
+    .s-err {
+      background: #DCDCD8;
+    }
+
+    .search-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 13px;
+      height: 13px;
+      color: var(--faint);
+      pointer-events: none;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 8px 12px 8px 30px;
+      background: #FAFAF8;
+      border: 0.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      outline: none;
+      transition: border-color .12s;
+    }
+
+    .search-wrap input::placeholder {
+      color: var(--faint);
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--border-hi);
+    }
+
+    .pills {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .pill {
+      font-size: 12px;
+      font-weight: 400;
+      padding: 4px 11px;
+      border-radius: 99px;
+      border: 0.5px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .1s;
+      white-space: nowrap;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .pill:hover {
+      border-color: var(--border-hi);
+      color: var(--text);
+    }
+
+    .pill.on {
+      background: var(--text);
+      border-color: var(--text);
+      color: #FFFFFF;
+    }
+
+    .sec-hdr {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--faint);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 28px 0 8px;
+    }
+
+    .sec-hdr:first-of-type {
+      margin-top: 0;
+    }
+
+    .sec-hdr em {
+      font-style: normal;
+      font-weight: 400;
+      letter-spacing: 0;
+      font-size: 11px;
+    }
+
+    .group {
+      border: 0.5px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      background: var(--surface);
+      margin-bottom: 4px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-top: 0.5px solid var(--faintest);
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      transition: background .1s;
+    }
+
+    .row:first-child {
+      border-top: none;
+    }
+
+    .row:hover {
+      background: #FAFAF8;
+    }
+
+    .row-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--faintest);
+      min-width: 18px;
+      flex-shrink: 0;
+      user-select: none;
+    }
+
+    .row-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      opacity: .45;
+      transition: opacity .1s;
+    }
+
+    .row:hover .row-dot {
+      opacity: .85;
+    }
+
+    .row-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .row-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .row-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .row-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      border: 0.5px solid;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: .02em;
+    }
+
+    .row-arr {
+      flex-shrink: 0;
+      color: var(--faintest);
+      transition: color .1s, transform .1s;
+    }
+
+    .row:hover .row-arr {
+      color: var(--muted);
+      transform: translateX(2px);
+    }
+
+    #empty {
+      display: none;
+      padding: 48px 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--faint);
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, .18);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .overlay.on {
+      display: flex;
+    }
+
+    .modal {
+      background: #FFFFFF;
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      width: 100%;
+      max-width: 340px;
+      position: relative;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .08);
+    }
+
+    .modal h2 {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+
+    .modal p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .modal input[type="password"] {
+      width: 100%;
+      padding: 8px 11px;
+      background: #FAFAF8;
+      border: 0.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text);
+      outline: none;
+      margin-bottom: 12px;
+      transition: border-color .12s;
+    }
+
+    .modal input:focus {
+      border-color: var(--border-hi);
+    }
+
+    .modal-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-p {
+      flex: 1;
+      padding: 8px;
+      background: var(--text);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--r-sm);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: opacity .1s;
+    }
+
+    .btn-p:hover {
+      opacity: .75;
+    }
+
+    .btn-g {
+      padding: 8px 14px;
+      background: transparent;
+      border: 0.5px solid var(--border);
+      border-radius: var(--r-sm);
+      font-size: 13px;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all .1s;
+    }
+
+    .btn-g:hover {
+      border-color: var(--border-hi);
+      color: var(--text);
+    }
+
+    .btn-x {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--faint);
+      font-size: 14px;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .btn-x:hover {
+      color: var(--text);
+    }
+  </style>
 </head>
+<body>
+  <div class="page">
 
-<body class="min-h-screen text-stone-300">
-
-    <div class="ambient-light"></div>
-    <div class="bg-grid"></div>
-
-    <!-- Header -->
-    <header class="pt-16 pb-12 px-6 max-w-7xl mx-auto">
-        <div class="flex items-center gap-3 mb-2">
-            <div
-                class="w-8 h-8 rounded-full bg-gradient-to-tr from-white-500 to-white-500 flex items-center justify-center shadow-lg white-500/20">
-                <img src="assets/ai_library_icon.svg" alt="Logo" class="w-5 h-5 opacity-90 brightness-200">
-            </div>
-            <span class="text-sm font-mono text-stone-500 tracking-widest">v2.5.0</span>
-        </div>
-        <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight">VentureScope Hub</h1>
-        <p class="text-stone-500 mt-2 text-lg max-w-2xl">
-            Command center for your agentic workflows and market intelligence.
-        </p>
-    </header>
-
-    <!-- Main Content -->
-    <main class="px-6 pb-20 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-
-        <!-- Column 1: Intelligence -->
-        <section>
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-2 h-8 rounded-full bg-indigo-500"></div>
-                <h2 class="text-2xl font-bold text-white">AI Intelligence</h2>
-            </div>
-
-            <div class="space-y-4">
-                <!-- Card: Market Scope -->
-                <a href="apps/market_scope.html" class="dashboard-card block rounded-xl p-5 group">
-                    <div class="flex justify-between items-start mb-3">
-                        <div
-                            class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20 transition-colors">
-                            <i class="ph-fill ph-binoculars text-xl"></i>
-                        </div>
-                        <i class="ph-bold ph-arrow-right text-stone-600 group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white group-hover:text-indigo-300 transition-colors">Market Scope
-                    </h3>
-                    <p class="text-sm text-stone-500 mt-1">Real-time signal detection from social media noise.</p>
-                </a>
-            </div>
-        </section>
-
-        <!-- Column 2: Learning -->
-        <section>
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-2 h-8 rounded-full bg-emerald-500"></div>
-                <h2 class="text-2xl font-bold text-white">Learning Path</h2>
-            </div>
-
-            <div class="space-y-4">
-                <!-- Card: Roadmap -->
-                <a href="apps/roadmap.html" class="dashboard-card block rounded-xl p-5 group">
-                    <div class="flex justify-between items-start mb-3">
-                        <div
-                            class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
-                            <i class="ph-fill ph-path text-xl"></i>
-                        </div>
-                        <i class="ph-bold ph-arrow-right text-stone-600 group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">Engineer
-                        Roadmap</h3>
-                    <p class="text-sm text-stone-500 mt-1">45-Day curriculum for Agentic AI architecture.</p>
-                </a>
-
-                <!-- Card: ExplainScope -->
-                <a href="apps/explain_scope.html" class="dashboard-card block rounded-xl p-5 group">
-                    <div class="flex justify-between items-start mb-3">
-                        <div
-                            class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
-                            <i class="ph-fill ph-traffic-signal text-xl"></i>
-                        </div>
-                        <i class="ph-bold ph-arrow-right text-stone-600 group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">ExplainScope
-                    </h3>
-                    <p class="text-sm text-stone-500 mt-1">Deep dive into API Rate Limiting & Traffic Control.</p>
-                </a>
-
-                <!-- Card: AWS EC2 -->
-                <a href="apps/aws_EC2.html" class="dashboard-card block rounded-xl p-5 group">
-                    <div class="flex justify-between items-start mb-3">
-                        <div
-                            class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
-                            <i class="ph-fill ph-cloud text-xl"></i>
-                        </div>
-                        <i class="ph-bold ph-arrow-right text-stone-600 group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white group-hover:text-emerald-300 transition-colors">AWS EC2
-                        Guide
-                    </h3>
-                    <p class="text-sm text-stone-500 mt-1">Interactive infographic guide to Amazon EC2.</p>
-                </a>
-            </div>
-        </section>
-
-        <!-- Column 3: Tools -->
-        <section>
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-2 h-8 rounded-full bg-stone-500"></div>
-                <h2 class="text-2xl font-bold text-white">Developer Tools</h2>
-            </div>
-
-            <div class="space-y-4">
-                <!-- Card: Config -->
-                <button onclick="openApiModal()" class="w-full text-left dashboard-card block rounded-xl p-5 group">
-                    <div class="flex justify-between items-start mb-3">
-                        <div
-                            class="p-2 rounded-lg bg-stone-800 text-stone-400 group-hover:bg-stone-700 transition-colors">
-                            <i class="ph-fill ph-gear text-xl"></i>
-                        </div>
-                        <div id="statusDot"
-                            class="w-2 h-2 rounded-full bg-red-500 mt-2 shadow-[0_0_8px_rgba(239,68,68,0.5)]"></div>
-                    </div>
-                    <h3 class="text-lg font-bold text-white group-hover:text-stone-300 transition-colors">System Config
-                    </h3>
-                    <p class="text-sm text-stone-500 mt-1">Manage Gemini API Keys & Secrets.</p>
-                </button>
-
-                <!-- Card: Legacy -->
-                <a href="apps/legacy_hub.html"
-                    class="dashboard-card block rounded-xl p-5 group border-stone-800 bg-black/20">
-                    <div class="flex justify-between items-start mb-3">
-                        <div
-                            class="p-2 rounded-lg bg-stone-900 text-stone-600 group-hover:text-stone-400 transition-colors">
-                            <i class="ph-fill ph-archive text-xl"></i>
-                        </div>
-                        <i
-                            class="ph-bold ph-arrow-right text-stone-700 group-hover:text-stone-500 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-stone-400 group-hover:text-stone-300 transition-colors">Legacy Hub
-                    </h3>
-                    <p class="text-sm text-stone-600 mt-1">Access previous dashboard version.</p>
-                </a>
-            </div>
-        </section>
-
-        <!-- Column 4: Personal -->
-        <section>
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-2 h-8 rounded-full bg-pink-500"></div>
-                <h2 class="text-2xl font-bold text-white">Personal</h2>
-            </div>
-
-            <div class="space-y-4">
-                <!-- Card: Daman -->
-                <a href="apps/Daman.html" class="dashboard-card block rounded-xl p-5 group">
-                    <div class="flex justify-between items-start mb-3">
-                        <div
-                            class="p-2 rounded-lg bg-pink-500/10 text-pink-400 group-hover:bg-pink-500/20 transition-colors">
-                            <i class="ph-fill ph-user text-xl"></i>
-                        </div>
-                        <i class="ph-bold ph-arrow-right text-stone-600 group-hover:text-white transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white group-hover:text-pink-300 transition-colors">Daman</h3>
-                    <p class="text-sm text-stone-500 mt-1">Access the personal Daman page.</p>
-                </a>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- API Modal -->
-    <div id="apiModal"
-        class="fixed inset-0 z-[100] hidden backdrop-blur-md bg-black/80 flex items-center justify-center opacity-0 transition-opacity duration-300">
-        <div class="bg-[#111] border border-stone-800 rounded-2xl p-8 w-full max-w-md shadow-2xl transform scale-95 transition-transform duration-300"
-            id="apiModalContent">
-            <div class="text-center mb-6">
-                <div
-                    class="w-12 h-12 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mx-auto mb-4">
-                    <i class="ph-fill ph-key text-indigo-400 text-xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-white">Security Protocol</h3>
-                <p class="text-stone-500 text-sm mt-1">Configure your Gemini API Access</p>
-            </div>
-
-            <div class="space-y-4">
-                <div>
-                    <input type="password" id="apiKeyInput"
-                        class="w-full bg-black border border-stone-800 rounded-xl px-4 py-3 text-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all font-mono text-sm"
-                        placeholder="sk-...">
-                </div>
-
-                <div class="flex gap-3">
-                    <button onclick="saveKey()"
-                        class="flex-1 bg-white text-black font-semibold rounded-xl py-2.5 hover:bg-stone-200 transition-colors">
-                        Connect
-                    </button>
-                    <button onclick="clearKey()"
-                        class="px-4 border border-red-900/30 text-red-500 bg-red-900/10 rounded-xl hover:bg-red-900/20 transition-colors">
-                        Revoke
-                    </button>
-                </div>
-            </div>
-
-            <button onclick="closeApiModal()"
-                class="absolute top-4 right-4 text-stone-600 hover:text-white transition-colors">
-                <i class="ph-bold ph-x"></i>
-            </button>
-        </div>
+    <div class="wordmark">
+      <div class="logo-box">
+        <img src="assets/ai_library_icon.svg" alt="">
+      </div>
+      <span class="wm-name">VentureScope</span>
+      <span class="wm-ver">2.5</span>
     </div>
 
+    <h1>Knowledge hub</h1>
+    <p class="sub">Agentic workflows, learning paths, and developer tools.</p>
 
-    <script>
-        // --- Encryption Logic ---
-        const ENCRYPTION_SECRET = "VentureScope_Gemini_Secret_Salt_v1";
-        const STORAGE_KEY = 'gemini_api_key';
+    <div class="meta">
+      <div class="meta-cell">
+        <div class="meta-n" id="totalN">11</div>
+        <div class="meta-lbl">Entries</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-n">4</div>
+        <div class="meta-lbl">Categories</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-n">
+          <span class="s-dot s-err" id="sDot"></span><span id="sLabel" style="font-size:13px;font-weight:400;">Not
+            set</span>
+        </div>
+        <div class="meta-lbl">API key</div>
+      </div>
+    </div>
 
-        function encryptData(text) {
-            try {
-                let result = "";
-                for (let i = 0; i < text.length; i++) {
-                    result += String.fromCharCode(text.charCodeAt(i) ^ ENCRYPTION_SECRET.charCodeAt(i % ENCRYPTION_SECRET.length));
-                }
-                return btoa(result);
-            } catch (e) { return ""; }
-        }
+    <div class="search-wrap">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="5.5" cy="5.5" r="3.5" />
+        <path d="M9 9l2.5 2.5" stroke-linecap="round" />
+      </svg>
+      <input id="search" type="text" placeholder="Search entries…" oninput="render()">
+    </div>
 
-        function decryptData(ciphertext) {
-            try {
-                const text = atob(ciphertext);
-                let result = "";
-                for (let i = 0; i < text.length; i++) {
-                    result += String.fromCharCode(text.charCodeAt(i) ^ ENCRYPTION_SECRET.charCodeAt(i % ENCRYPTION_SECRET.length));
-                }
-                return result;
-            } catch (e) { return ""; }
-        }
+    <div class="pills" id="pills">
+      <button class="pill on" data-f="all" onclick="setF(this)">All</button>
+      <button class="pill" data-f="intelligence" onclick="setF(this)">Intelligence</button>
+      <button class="pill" data-f="learning" onclick="setF(this)">Learning</button>
+      <button class="pill" data-f="flutter" onclick="setF(this)">Flutter</button>
+      <button class="pill" data-f="backend" onclick="setF(this)">Backend</button>
+      <button class="pill" data-f="tools" onclick="setF(this)">Tools</button>
+      <button class="pill" data-f="personal" onclick="setF(this)">Personal</button>
+    </div>
 
-        function checkKeyStatus() {
-            const encrypted = localStorage.getItem(STORAGE_KEY);
-            const dot = document.getElementById('statusDot');
+    <div id="list"></div>
+    <div id="empty">No entries match.</div>
 
-            if (encrypted && decryptData(encrypted).length > 5) {
-                dot.className = "w-2 h-2 rounded-full bg-emerald-500 mt-2 shadow-[0_0_8px_rgba(16,185,129,0.5)]";
-            } else {
-                dot.className = "w-2 h-2 rounded-full bg-red-500 mt-2 shadow-[0_0_8px_rgba(239,68,68,0.5)]";
-            }
-        }
+  </div>
 
-        // --- Modal ---
-        const modal = document.getElementById('apiModal');
-        const modalContent = document.getElementById('apiModalContent');
+  <div class="overlay" id="overlay" onclick="if(event.target===this)closeM()">
+    <div class="modal">
+      <button class="btn-x" onclick="closeM()">&#x2715;</button>
+      <h2>API configuration</h2>
+      <p>Paste your Gemini API key to enable intelligence features.</p>
+      <input type="password" id="ki" placeholder="AIza…">
+      <div class="modal-row">
+        <button class="btn-p" onclick="saveK()">Save key</button>
+        <button class="btn-g" onclick="revokeK()">Revoke</button>
+      </div>
+    </div>
+  </div>
 
-        function openApiModal() {
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modalContent.classList.remove('scale-95');
-                modalContent.classList.add('scale-100');
-            }, 10);
-        }
+  <script>
+    const CATS = {
+      intelligence: { label: 'Intelligence', color: '#3D7A8A' },
+      learning: { label: 'Learning', color: '#5A6B7B' },
+      flutter: { label: 'Flutter', color: '#3D7A8A' },
+      backend: { label: 'Backend', color: '#5A6B7B' },
+      tools: { label: 'Tools', color: '#9A9A9A' },
+      personal: { label: 'Personal', color: '#3D7A8A' },
+    };
 
-        function closeApiModal() {
-            modal.classList.add('opacity-0');
-            modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
+    const DATA = [
+      { n: '01', title: 'Market Scope', desc: 'Signal detection from social media noise.', cat: 'intelligence', href: 'apps/market_scope.html' },
+      { n: '02', title: 'Engineer Roadmap', desc: '45-day Agentic AI architecture curriculum.', cat: 'learning', href: 'apps/roadmap.html' },
+      { n: '03', title: 'ExplainScope', desc: 'API rate limiting and traffic control deep dive.', cat: 'learning', href: 'apps/explain_scope.html' },
+      { n: '04', title: 'AWS EC2 Guide', desc: 'Interactive Amazon EC2 instance infographic.', cat: 'learning', href: 'apps/aws_EC2.html' },
+      { n: '05', title: 'Flutter DI', desc: 'Dependency injection patterns with GetIt.', cat: 'flutter', href: 'apps/Flutter Dependency Injection.html' },
+      { n: '06', title: 'Flutter Mixins', desc: 'Mixins in Dart and Flutter, applied.', cat: 'flutter', href: 'apps/Flutter Mixins.html' },
+      { n: '07', title: 'Flutter & Serverless', desc: 'Serverless backend integration for Flutter apps.', cat: 'flutter', href: 'apps/Flutter DI and Serverless Backends.html' },
+      { n: '08', title: 'DataJpa Test', desc: 'Spring Data JPA testing — slices and H2.', cat: 'backend', href: 'apps/DataJpaTest.html' },
+      { n: '09', title: 'System Config', desc: 'Manage API keys and connected services.', cat: 'tools', action: 'openM()' },
+      { n: '10', title: 'Legacy Hub', desc: 'Archived previous dashboard version.', cat: 'tools', href: 'apps/legacy_hub.html' },
+    ];
 
-        function saveKey() {
-            const val = document.getElementById('apiKeyInput').value.trim();
-            if (val) {
-                localStorage.setItem(STORAGE_KEY, encryptData(val));
-                checkKeyStatus();
-                closeApiModal();
-                document.getElementById('apiKeyInput').value = '';
-            }
-        }
+    let activeF = 'all';
 
-        function clearKey() {
-            localStorage.removeItem(STORAGE_KEY);
-            checkKeyStatus();
-            closeApiModal();
-        }
+    function setF(btn) {
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
+      btn.classList.add('on');
+      activeF = btn.dataset.f;
+      render();
+    }
 
-        document.addEventListener('DOMContentLoaded', checkKeyStatus);
+    function render() {
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const list = document.getElementById('list');
+      list.innerHTML = '';
 
-    </script>
+      const items = DATA.filter(e => {
+        return (activeF === 'all' || e.cat === activeF) &&
+          (!q || e.title.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q));
+      });
+
+      document.getElementById('empty').style.display = items.length ? 'none' : 'block';
+
+      const grouped = activeF === 'all' && !q;
+      if (grouped) {
+        const gs = {};
+        items.forEach(e => { if (!gs[e.cat]) gs[e.cat] = []; gs[e.cat].push(e); });
+        Object.entries(gs).forEach(([cat, arr]) => {
+          const h = document.createElement('div');
+          h.className = 'sec-hdr';
+          h.innerHTML = `${CATS[cat].label}<em>${arr.length}</em>`;
+          list.appendChild(h);
+          list.appendChild(mkGroup(arr));
+        });
+      } else {
+        if (items.length) list.appendChild(mkGroup(items));
+      }
+    }
+
+    function mkGroup(items) {
+      const g = document.createElement('div');
+      g.className = 'group';
+      items.forEach(e => g.appendChild(mkRow(e)));
+      return g;
+    }
+
+    function mkRow(e) {
+      const el = e.href ? document.createElement('a') : document.createElement('button');
+      if (e.href) el.href = e.href; else el.onclick = () => eval(e.action);
+      el.className = 'row';
+      const c = CATS[e.cat];
+      el.innerHTML = `
+    <span class="row-n">${e.n}</span>
+    <span class="row-dot" style="background:${c.color}"></span>
+    <span class="row-body">
+      <span class="row-title">${e.title}</span>
+      <span class="row-desc">${e.desc}</span>
+    </span>
+    <span class="row-badge" style="color:${c.color};border-color:${c.color}30">${c.label}</span>
+    <svg class="row-arr" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12">
+      <path d="M2 6h8M7 3l3 3-3 3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+      return el;
+    }
+
+    const SK = 'VentureScope_Gemini_Secret_Salt_v1', KK = 'gemini_api_key';
+    function xor(s) { let r = ''; for (let i = 0; i < s.length; i++)r += String.fromCharCode(s.charCodeAt(i) ^ SK.charCodeAt(i % SK.length)); return r; }
+    function enc(t) { try { return btoa(xor(t)); } catch (e) { return ''; } }
+    function dec(c) { try { return xor(atob(c)); } catch (e) { return ''; } }
+
+    function chkKey() {
+      let ok = false; try { ok = dec(localStorage.getItem(KK) || '').length > 5; } catch (e) { }
+      document.getElementById('sDot').className = 's-dot ' + (ok ? 's-ok' : 's-err');
+      document.getElementById('sLabel').textContent = ok ? 'Connected' : 'Not set';
+    }
+
+    function openM() { document.getElementById('overlay').classList.add('on'); }
+    function closeM() { document.getElementById('overlay').classList.remove('on'); }
+    function saveK() { const v = document.getElementById('ki').value.trim(); if (v) { localStorage.setItem(KK, enc(v)); chkKey(); closeM(); document.getElementById('ki').value = ''; } }
+    function revokeK() { localStorage.removeItem(KK); chkKey(); closeM(); }
+
+    document.addEventListener('DOMContentLoaded', () => { render(); chkKey(); });
+  </script>
 </body>
-
 </html>
