@@ -254,6 +254,7 @@
       align-items: center;
       gap: 12px;
       padding: 11px 14px;
+      border: none;
       border-top: 0.5px solid var(--faintest);
       text-decoration: none;
       color: inherit;
@@ -263,6 +264,7 @@
       text-align: left;
       font-family: 'Inter', sans-serif;
       transition: background .1s;
+      outline: none;
     }
 
     .row:first-child {
@@ -546,9 +548,10 @@
       { n: '06', title: 'Flutter Mixins', desc: 'Mixins in Dart and Flutter, applied.', cat: 'flutter', href: 'apps/Flutter Mixins.html' },
       { n: '07', title: 'Flutter & Serverless', desc: 'Serverless backend integration for Flutter apps.', cat: 'flutter', href: 'apps/Flutter DI and Serverless Backends.html' },
       { n: '08', title: 'Flutter UX Guide', desc: 'Mobile UX bottlenecks & Flutter flows.', cat: 'flutter', href: 'apps/flutter_better_UL_UX_guide.html' },
-      { n: '08', title: 'DataJpa Test', desc: 'Spring Data JPA testing — slices and H2.', cat: 'backend', href: 'apps/DataJpaTest.html' },
-      { n: '09', title: 'System Config', desc: 'Manage API keys and connected services.', cat: 'tools', action: 'openM()' },
-      { n: '10', title: 'Legacy Hub', desc: 'Archived previous dashboard version.', cat: 'tools', href: 'apps/legacy_hub.html' },
+      { n: '09', title: 'DataJpa Test', desc: 'Spring Data JPA testing — slices and H2.', cat: 'backend', href: 'apps/DataJpaTest.html' },
+      { n: '10', title: 'SQLAlchemy', desc: 'SQLAlchemy 2.0 Async ORM cheat sheet and reference.', cat: 'backend', href: 'apps/SQLAlchemy.html' },
+      { n: '11', title: 'System Config', desc: 'Manage API keys and connected services.', cat: 'tools', action: 'openM()' },
+      { n: '12', title: 'Legacy Hub', desc: 'Archived previous dashboard version.', cat: 'tools', href: 'apps/legacy_hub.html' },
     ];
 
     let activeF = 'all';
@@ -630,7 +633,11 @@
     function saveK() { const v = document.getElementById('ki').value.trim(); if (v) { localStorage.setItem(KK, enc(v)); chkKey(); closeM(); document.getElementById('ki').value = ''; } }
     function revokeK() { localStorage.removeItem(KK); chkKey(); closeM(); }
 
-    document.addEventListener('DOMContentLoaded', () => { render(); chkKey(); });
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('totalN').textContent = DATA.length;
+      render();
+      chkKey();
+    });
   </script>
 </body>
 </html>
